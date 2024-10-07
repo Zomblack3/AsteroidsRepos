@@ -57,27 +57,41 @@ void gameplayUpdates(Player& player)
 	if (mousePosSavedTimer != 0)
 		--mousePosSavedTimer;
 
-	if (player.pos.x != mousePosSaved[actualMousePosSaved].x)
-		if (player.pos.x > mousePosSaved[actualMousePosSaved].x)
+	if (player.pos.x != mousePos.x || player.pos.y != mousePos.y)
+		if (player.pos.x + (player.width / 2) > mousePos.x && player.pos.y + (player.height / 2) > mousePos.y)
+		{
 			player.pos.x -= player.speed;
-		else
-			player.pos.x += player.speed;
-
-	if (player.pos.y != mousePosSaved[actualMousePosSaved].y)
-		if (player.pos.y > mousePosSaved[actualMousePosSaved].y)
 			player.pos.y -= player.speed;
-		else
+		}
+		else if (player.pos.x + (player.width / 2) < mousePos.x && player.pos.y + (player.height / 2) < mousePos.y)
+		{
+			player.pos.x += player.speed;
 			player.pos.y += player.speed;
-
-	/*if (IsKeyDown(KEY_LEFT))
-		player.pos.x -= player.speed;
-
-	if (IsKeyDown(KEY_RIGHT))
-		player.pos.x += player.speed;
-
-	if (IsKeyDown(KEY_UP))
-		player.pos.y -= player.speed;
-
-	if (IsKeyDown(KEY_DOWN))
-		player.pos.y += player.speed;*/
+		}
+		else if (player.pos.x + (player.width / 2) < mousePos.x && player.pos.y + (player.height / 2) > mousePos.y)
+		{
+			player.pos.x += player.speed;
+			player.pos.y -= player.speed;
+		}
+		else if (player.pos.x + (player.width / 2) > mousePos.x && player.pos.y + (player.height / 2) < mousePos.y)
+		{
+			player.pos.x -= player.speed;
+			player.pos.y += player.speed;
+		}
+		else if (player.pos.x + (player.width / 2) > mousePos.x && player.pos.y + (player.height / 2) == mousePos.y)
+		{
+			player.pos.x -= player.speed;
+		}
+		else if (player.pos.x + (player.width / 2) < mousePos.x && player.pos.y + (player.height / 2) == mousePos.y)
+		{
+			player.pos.x += player.speed;
+		}
+		else if (player.pos.x + (player.width / 2) == mousePos.x && player.pos.y + (player.height / 2) > mousePos.y)
+		{
+			player.pos.y -= player.speed;
+		}
+		else if (player.pos.x + (player.width / 2) == mousePos.x && player.pos.y + (player.height / 2) < mousePos.y)
+		{
+			player.pos.y += player.speed;
+		}
 }

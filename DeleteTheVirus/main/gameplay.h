@@ -7,8 +7,6 @@ struct Player
 	int width = 100;
 	int height = 50;
 	Vector2 pos = { windowWidth / 2, windowHeight / 2 };
-	/*float posX = windowWidth / 2;
-	float posY = windowHeight / 2;*/
 	float speed = 50 * GetFrameTime();
 	int lives = 3;
 	int ammo = 10;
