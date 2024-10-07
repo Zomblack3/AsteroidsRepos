@@ -4,7 +4,7 @@
 
 struct Player
 {
-	int width = 100;
+	int width = 50;
 	int height = 50;
 	Vector2 pos = { windowWidth / 2, windowHeight / 2 };
 	float speed = 50 * GetFrameTime();
@@ -22,7 +22,8 @@ struct Asteroids
 
 void gameplay(ACTUAL_SCREEN& actualScreen);
 void gameplayDrawing(Player player);
-void gameplayUpdates(Player& player);
+void gameplayUpdates(Player player);
+void playerUpdate(Player& player);
 
 const int maxAsteroidRadius = 20;
 const int minAsteroidRadius = 5;
