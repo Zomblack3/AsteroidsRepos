@@ -98,5 +98,36 @@ void gameplayUpdates(Player& player)
 
 void playerUpdate(Player& player)
 {
+	if (!player.isShooting)
+		player.bullet.pos = player.pos;
+	else
+		if (player.bullet.direction.x < 0 && player.bullet.direction.y < 0)
+		{
+			player.bullet.direction.x *= -1.0;
+			player.bullet.direction.y *= -1.0;
+
+			player.bullet.pos.x -= player.bullet.direction.x;
+			player.bullet.pos.y -= player.bullet.direction.y;
+		}
+		else if (player.bullet.direction.x > 0 && player.bullet.direction.y > 0)
+		{
+			player.bullet.pos.x += player.bullet.direction.x;
+			player.bullet.pos.y += player.bullet.direction.y;
+		}
+		else if (player.bullet.direction.x > 0 && player.bullet.direction.y < 0)
+		{
+			player.bullet.direction.y *= -1.0;
+
+			player.bullet.pos.x += player.bullet.direction.x;
+			player.bullet.pos.y -= player.bullet.direction.y;
+		}
+		else if (player.bullet.direction.x < 0 && player.bullet.direction.y > 0)
+		{
+			player.bullet.direction.x *= -1.0;
+
+			player.bullet.pos.x -= player.bullet.direction.x;
+			player.bullet.pos.y += player.bullet.direction.y;
+		}
+
 	playerMovement(player);
 }

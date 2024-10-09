@@ -102,11 +102,15 @@ void playerShooting(Player& player)
 {
 	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
 		if (player.ammo != 0)
-			shot();
+		{
+			player.isShooting = true;
+
+			shoot();
+		}
 
 }
 
-void shot()
+void shoot()
 {
 
 }
