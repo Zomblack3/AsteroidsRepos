@@ -25,4 +25,4 @@ struct Player
 
 void playerMovement(Player& player);
 void playerShooting(Player& player);
-void shoot();
+void shoot(Player& player);

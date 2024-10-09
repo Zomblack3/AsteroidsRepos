@@ -102,15 +102,45 @@ void playerShooting(Player& player)
 {
 	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
 		if (player.ammo != 0)
-		{
 			player.isShooting = true;
 
-			shoot();
-		}
+	if (player.isShooting)
+		shoot(player);
+	else
+	{
+		player.bullet.pos.x == player.pos.x;
+		player.bullet.pos.y == player.pos.y;
+	}
 
 }
 
-void shoot()
+void shoot(Player& player)
 {
+	if (player.bullet.direction.x < 0 && player.bullet.direction.y < 0)
+	{
+		player.bullet.direction.x *= -1.0;
+		player.bullet.direction.y *= -1.0;
 
+		player.bullet.pos.x -= player.bullet.direction.x;
+		player.bullet.pos.y -= player.bullet.direction.y;
+	}
+	else if (player.bullet.direction.x > 0 && player.bullet.direction.y > 0)
+	{
+		player.bullet.pos.x += player.bullet.direction.x;
+		player.bullet.pos.y += player.bullet.direction.y;
+	}
+	else if (player.bullet.direction.x > 0 && player.bullet.direction.y < 0)
+	{
+		player.bullet.direction.y *= -1.0;
+
+		player.bullet.pos.x += player.bullet.direction.x;
+		player.bullet.pos.y -= player.bullet.direction.y;
+	}
+	else if (player.bullet.direction.x < 0 && player.bullet.direction.y > 0)
+	{
+		player.bullet.direction.x *= -1.0;
+
+		player.bullet.pos.x -= player.bullet.direction.x;
+		player.bullet.pos.y += player.bullet.direction.y;
+	}
 }
