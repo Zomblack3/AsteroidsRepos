@@ -8,7 +8,8 @@ struct Bullet
 	int height = 10;
 	Vector2 pos = { };
 	Vector2 direction = GetMousePosition();
-	float speed = 500 * GetFrameTime();
+	float speed = 50 * GetFrameTime();
+	float reloadingTimer = 0.0f;
 };
 
 struct Player
@@ -16,7 +17,7 @@ struct Player
 	int width = 50;
 	int height = 50;
 	Vector2 pos = { windowWidth / 2, windowHeight / 2 };
-	float speed = 20 * GetFrameTime();
+	float speed = 100 * GetFrameTime();
 	int lives = 3;
 	int ammo = 10;
 	bool isShooting = false;

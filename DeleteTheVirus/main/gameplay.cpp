@@ -24,6 +24,10 @@ void gameplayDrawing(Player player)
 
 	ClearBackground(BLACK);
 
+	if (player.bullet.reloadingTimer != 0)
+		DrawRectangle(player.bullet.pos.x, player.bullet.pos.y, player.bullet.width, player.bullet.height, RED);
+
+
 	DrawRectangle(player.pos.x, player.pos.y, player.width, player.height, WHITE);
 
 	EndDrawing();
@@ -99,4 +103,6 @@ void gameplayUpdates(Player& player)
 void playerUpdate(Player& player)
 {
 	playerMovement(player);
+
+	playerShooting(player);
 }

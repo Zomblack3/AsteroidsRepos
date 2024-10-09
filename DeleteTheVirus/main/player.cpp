@@ -100,47 +100,69 @@ void playerMovement(Player& player)
 
 void playerShooting(Player& player)
 {
-	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
-		if (player.ammo != 0)
-			player.isShooting = true;
+	if (player.bullet.reloadingTimer == 0.0f)
+	{
+		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
+			if (player.ammo != 0)
+			{
+				player.isShooting = true;
+				player.bullet.reloadingTimer = 1000.0f;
+			}
+	}
 
 	if (player.isShooting)
 		shoot(player);
+
+	if (player.bullet.reloadingTimer != 0)
+		player.bullet.reloadingTimer -= 1;
 	else
 	{
 		player.bullet.pos.x == player.pos.x;
 		player.bullet.pos.y == player.pos.y;
-	}
 
+		player.isShooting = false;
+	}
 }
 
 void shoot(Player& player)
 {
 	if (player.bullet.direction.x < 0 && player.bullet.direction.y < 0)
 	{
-		player.bullet.direction.x *= -1.0;
+		/*player.bullet.direction.x *= -1.0;
 		player.bullet.direction.y *= -1.0;
 
 		player.bullet.pos.x -= player.bullet.direction.x;
-		player.bullet.pos.y -= player.bullet.direction.y;
+		player.bullet.pos.y -= player.bullet.direction.y;*/
+
+		player.bullet.pos.x += player.bullet.speed;
+		player.bullet.pos.y += player.bullet.speed;
 	}
 	else if (player.bullet.direction.x > 0 && player.bullet.direction.y > 0)
 	{
-		player.bullet.pos.x += player.bullet.direction.x;
-		player.bullet.pos.y += player.bullet.direction.y;
+		/*player.bullet.pos.x += player.bullet.direction.x;
+		player.bullet.pos.y += player.bullet.direction.y;*/
+
+		player.bullet.pos.x -= player.bullet.speed;
+		player.bullet.pos.y -= player.bullet.speed;
 	}
 	else if (player.bullet.direction.x > 0 && player.bullet.direction.y < 0)
 	{
-		player.bullet.direction.y *= -1.0;
+		/*player.bullet.direction.y *= -1.0;
 
 		player.bullet.pos.x += player.bullet.direction.x;
-		player.bullet.pos.y -= player.bullet.direction.y;
+		player.bullet.pos.y -= player.bullet.direction.y;*/
+
+		player.bullet.pos.x -= player.bullet.speed;
+		player.bullet.pos.y += player.bullet.speed;
 	}
 	else if (player.bullet.direction.x < 0 && player.bullet.direction.y > 0)
 	{
-		player.bullet.direction.x *= -1.0;
+		/*player.bullet.direction.x *= -1.0;
 
 		player.bullet.pos.x -= player.bullet.direction.x;
-		player.bullet.pos.y += player.bullet.direction.y;
+		player.bullet.pos.y += player.bullet.direction.y;*/
+
+		player.bullet.pos.x += player.bullet.speed;
+		player.bullet.pos.y -= player.bullet.speed;
 	}
 }
