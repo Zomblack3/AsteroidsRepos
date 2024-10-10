@@ -10,11 +10,9 @@ void playerMovement(Player& player)
 	player.bullet.pos = player.pos;
 	float angleToMouse = atan2(player.mousePos.y - player.pos.y, player.mousePos.x - player.pos.x);
 	player.angle = angleToMouse;
-	player.generalSpeed = 150.0f * GetFrameTime();
+	//player.generalSpeed = 150.0f * GetFrameTime();
 	player.speedX = (player.angle * cos(player.angle)) * player.generalSpeed;
 	player.speedY = (player.angle * sin(player.angle)) * player.generalSpeed;
-	float check1 = cos(player.angle);
-	float check2 = sin(player.angle);
 
 	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 	{
@@ -25,8 +23,8 @@ void playerMovement(Player& player)
 		}
 		else if (cos(player.angle) > 0.1 && sin(player.angle) > 0.1)
 		{
-			player.pos.x += player.speedX * 2;
-			player.pos.y += player.speedY * 2;
+			player.pos.x += player.speedX * 4;
+			player.pos.y += player.speedY * 4;
 		}
 		else if (cos(player.angle) < 0.1 && sin(player.angle) > 0.1)
 		{
@@ -35,20 +33,9 @@ void playerMovement(Player& player)
 		}
 		else if (cos(player.angle) > 0.1 && sin(player.angle) < 0.1 )
 		{
-			player.pos.x -= player.speedX * 20;
-			player.pos.y += (player.speedY * -1.0) * 20;
+			player.pos.x -= player.speedX * 4;
+			player.pos.y += (player.speedY * -1.0) * 4;
 		}
-		//else
-		//{
-		//	if (cos(player.angle) == 0.1 && sin(player.angle) < 0.1)
-		//		player.pos.y += player.generalSpeed;
-		//	else if (cos(player.angle) == 0.1 && sin(player.angle) > 0.1)
-		//		player.pos.y -= player.generalSpeed;
-		//	else if (cos(player.angle) < 0.1 && sin(player.angle) == 0.1)
-		//		player.pos.x += player.generalSpeed;
-		//	else
-		//		player.pos.x -= player.speedX;
-		//}
 	}
 	else
 	{
@@ -72,33 +59,39 @@ void playerMovement(Player& player)
 
 void playerShooting(Player& player)
 {
+	player.bullet.speedX = (player.angle * cos(player.angle)) * player.bullet.generalSpeed;
+	player.bullet.speedY = (player.angle * sin(player.angle)) * player.bullet.generalSpeed;
+
 	if (player.bullet.reloadingTimer == 0.0f)
 	{
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
+		{
 			if (player.ammo != 0)
 			{
 				player.isShooting = true;
-				player.bullet.reloadingTimer = 1000.0f;
+				player.bullet.reloadingTimer = 100.0f;
 			}
+		}
 	}
 
 	if (player.isShooting)
 		shoot(player);
+	else
+		player.bullet.pos = player.pos;
 
 	if (player.bullet.reloadingTimer != 0)
-		player.bullet.reloadingTimer -= 1;
+		player.bullet.reloadingTimer -= 0.1;
 	else
-	{
-		player.bullet.pos.x == player.pos.x;
-		player.bullet.pos.y == player.pos.y;
-
 		player.isShooting = false;
-	}
 }
 
 void shoot(Player& player)
 {
-	if (player.bullet.direction.x < 0 && player.bullet.direction.y < 0)
+	//float angleToMouse = atan2(player.mousePos.y - player.pos.y, player.mousePos.x - player.pos.x);
+	player.bullet.speedX = (player.angle * cos(player.angle)) * player.bullet.generalSpeed;
+	player.bullet.speedY = (player.angle * sin(player.angle)) * player.bullet.generalSpeed;
+
+	if (cos(player.angle) < 0.1 && sin(player.angle) < 0.1)
 	{
 		/*player.bullet.direction.x *= -1.0;
 		player.bullet.direction.y *= -1.0;
@@ -106,35 +99,35 @@ void shoot(Player& player)
 		player.bullet.pos.x -= player.bullet.direction.x;
 		player.bullet.pos.y -= player.bullet.direction.y;*/
 
-		player.bullet.pos.x += player.bullet.speed;
-		player.bullet.pos.y += player.bullet.speed;
+		player.bullet.pos.x -= player.bullet.speedX * 5;
+		player.bullet.pos.y -= player.bullet.speedY * 5;
 	}
-	else if (player.bullet.direction.x > 0 && player.bullet.direction.y > 0)
+	else if (cos(player.angle) > 0.1 && sin(player.angle) > 0.1)
 	{
 		/*player.bullet.pos.x += player.bullet.direction.x;
 		player.bullet.pos.y += player.bullet.direction.y;*/
 
-		player.bullet.pos.x -= player.bullet.speed;
-		player.bullet.pos.y -= player.bullet.speed;
+		player.bullet.pos.x += player.bullet.speedX * 5;
+		player.bullet.pos.y += player.bullet.speedY * 5;
 	}
-	else if (player.bullet.direction.x > 0 && player.bullet.direction.y < 0)
+	else if (cos(player.angle) > 0.1 && sin(player.angle) < 0.1)
 	{
 		/*player.bullet.direction.y *= -1.0;
 
 		player.bullet.pos.x += player.bullet.direction.x;
 		player.bullet.pos.y -= player.bullet.direction.y;*/
 
-		player.bullet.pos.x -= player.bullet.speed;
-		player.bullet.pos.y += player.bullet.speed;
+		player.bullet.pos.x -= (player.bullet.speedX * -1.0) * 5;
+		player.bullet.pos.y += player.bullet.speedY * 5;
 	}
-	else if (player.bullet.direction.x < 0 && player.bullet.direction.y > 0)
+	else if (cos(player.angle) < 0.1 && sin(player.angle) > 0.1)
 	{
 		/*player.bullet.direction.x *= -1.0;
 
 		player.bullet.pos.x -= player.bullet.direction.x;
 		player.bullet.pos.y += player.bullet.direction.y;*/
 
-		player.bullet.pos.x += player.bullet.speed;
-		player.bullet.pos.y -= player.bullet.speed;
+		player.bullet.pos.x -= player.bullet.speedX * 5;
+		player.bullet.pos.y += (player.bullet.speedY * -1.0) * 5;
 	}
 }

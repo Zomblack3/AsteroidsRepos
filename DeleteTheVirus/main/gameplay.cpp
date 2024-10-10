@@ -24,13 +24,12 @@ void gameplayDrawing(Player player)
 
 	ClearBackground(BLACK);
 
-	if (player.bullet.reloadingTimer != 0)
-		DrawRectangle(player.bullet.pos.x, player.bullet.pos.y, player.bullet.width, player.bullet.height, RED);
-
 	DrawCircle(player.pos.x, player.pos.y, player.radius, WHITE);
-	//DrawRectangle(player.pos.x, player.pos.y, player.width, player.height, WHITE);
 
-	DrawLineV(player.pos, player.mousePos, WHITE);
+	if (player.isShooting)
+		DrawCircle(player.bullet.pos.x, player.bullet.pos.y, player.bullet.radius, RED);
+
+	//DrawLineV(player.pos, player.mousePos, WHITE);
 
 	EndDrawing();
 }
@@ -39,67 +38,7 @@ void gameplayUpdates(Player& player)
 {
 	playerUpdate(player);
 
-	/*if (player.pos.x != mousePosSaved[actualMousePosSaved].x || player.pos.y != mousePosSaved[actualMousePosSaved].y)
-		if (player.pos.x + (player.width / 2.0f) > mousePosSaved[actualMousePosSaved].x && player.pos.y + (player.height / 2.0f) > mousePosSaved[actualMousePosSaved].y)
-		{
-			if (player.pos.x > 0 && player.pos.y > 0)
-			{
-				player.pos.x -= player.speed;
-				player.pos.y -= player.speed;
-			}
-		}
-		else if (player.pos.x + (player.width / 2.0f) < mousePosSaved[actualMousePosSaved].x && player.pos.y + (player.height / 2.0f) < mousePosSaved[actualMousePosSaved].y)
-		{
-			if (player.pos.x + player.width < windowWidth && player.pos.y + player.height < windowHeight)
-			{
-				player.pos.x += player.speed;
-				player.pos.y += player.speed;
-			}
-		}
-		else if (player.pos.x + (player.width / 2.0f) < mousePosSaved[actualMousePosSaved].x && player.pos.y + (player.height / 2.0f) > mousePosSaved[actualMousePosSaved].y)
-		{
-			if (player.pos.x + player.width < windowWidth && player.pos.y > 0)
-			{
-				player.pos.x += player.speed;
-				player.pos.y -= player.speed;
-			}
-		}
-		else if (player.pos.x + (player.width / 2.0f) > mousePosSaved[actualMousePosSaved].x && player.pos.y + (player.height / 2.0f) < mousePosSaved[actualMousePosSaved].y)
-		{
-			if (player.pos.x > 0 && player.pos.y + player.height < windowHeight)
-			{
-				player.pos.x -= player.speed;
-				player.pos.y += player.speed;
-			}
-		}
-		else if (player.pos.x + (player.width / 2.0f) > mousePosSaved[actualMousePosSaved].x && player.pos.y + (player.height / 2.0f) == mousePosSaved[actualMousePosSaved].y)
-		{
-			if (player.pos.x > 0)
-			{
-				player.pos.x -= player.speed;
-			}
-		}
-		else if (player.pos.x + (player.width / 2.0f) < mousePosSaved[actualMousePosSaved].x && player.pos.y + (player.height / 2.0f) == mousePosSaved[actualMousePosSaved].y)
-		{
-			if (player.pos.x + player.width < windowWidth)
-			{
-				player.pos.x += player.speed;
-			}
-		}
-		else if (player.pos.x + (player.width / 2.0f) == mousePosSaved[actualMousePosSaved].x && player.pos.y + (player.height / 2.0f) > mousePosSaved[actualMousePosSaved].y)
-		{
-			if (player.pos.y > 0)
-			{
-				player.pos.y -= player.speed;
-			}
-		}
-		else if (player.pos.x + (player.width / 2.0f) == mousePosSaved[actualMousePosSaved].x && player.pos.y + (player.height / 2) < mousePosSaved[actualMousePosSaved].y)
-		{
-			if (player.pos.y + player.height < windowHeight)
-			{
-				player.pos.y += player.speed;
-			}
-		}*/
+
 }
 
 void playerUpdate(Player& player)
