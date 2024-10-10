@@ -27,8 +27,10 @@ void gameplayDrawing(Player player)
 	if (player.bullet.reloadingTimer != 0)
 		DrawRectangle(player.bullet.pos.x, player.bullet.pos.y, player.bullet.width, player.bullet.height, RED);
 
+	DrawCircle(player.pos.x, player.pos.y, player.radius, WHITE);
+	//DrawRectangle(player.pos.x, player.pos.y, player.width, player.height, WHITE);
 
-	DrawRectangle(player.pos.x, player.pos.y, player.width, player.height, WHITE);
+	DrawLineV(player.pos, player.mousePos, WHITE);
 
 	EndDrawing();
 }
