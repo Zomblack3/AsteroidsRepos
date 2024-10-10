@@ -38,17 +38,17 @@ void playerMovement(Player& player)
 			player.pos.x -= player.speedX * 20;
 			player.pos.y += (player.speedY * -1.0) * 20;
 		}
-		else
-		{
-			if (cos(player.angle) == 0.1 && sin(player.angle) < 0.1)
-				player.pos.y += player.generalSpeed;
-			else if (cos(player.angle) == 0.1 && sin(player.angle) > 0.1)
-				player.pos.y -= player.generalSpeed;
-			else if (cos(player.angle) < 0.1 && sin(player.angle) == 0.1)
-				player.pos.x += player.generalSpeed;
-			else
-				player.pos.x -= player.speedX;
-		}
+		//else
+		//{
+		//	if (cos(player.angle) == 0.1 && sin(player.angle) < 0.1)
+		//		player.pos.y += player.generalSpeed;
+		//	else if (cos(player.angle) == 0.1 && sin(player.angle) > 0.1)
+		//		player.pos.y -= player.generalSpeed;
+		//	else if (cos(player.angle) < 0.1 && sin(player.angle) == 0.1)
+		//		player.pos.x += player.generalSpeed;
+		//	else
+		//		player.pos.x -= player.speedX;
+		//}
 	}
 	else
 	{
