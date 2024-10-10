@@ -10,42 +10,42 @@ void playerMovement(Player& player)
 	player.bullet.pos = player.pos;
 	float angleToMouse = atan2(player.mousePos.y - player.pos.y, player.mousePos.x - player.pos.x);
 	player.angle = angleToMouse;
-	player.generalSpeed = 50.0f * GetFrameTime();
+	player.generalSpeed = 150.0f * GetFrameTime();
 	player.speedX = (player.angle * cos(player.angle)) * player.generalSpeed;
 	player.speedY = (player.angle * sin(player.angle)) * player.generalSpeed;
+	float check1 = cos(player.angle);
+	float check2 = sin(player.angle);
 
 	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 	{
-		if (player.speedX > 0 && player.speedY > 1)
+		if (cos(player.angle) < 0.1 && sin(player.angle) < 0.1)
 		{
-			//player.pos.x -= (player.angle * cos(player.angle)) * player.speed;
-			//player.pos.y -= (player.angle * sin(player.angle)) * player.speed;
 			player.pos.x -= player.speedX;
 			player.pos.y -= player.speedY;
 		}
-		else if (player.speedX < 0 && player.speedY < 1)
+		else if (cos(player.angle) > 0.1 && sin(player.angle) > 0.1)
 		{
-			player.pos.x += player.speedX;
+			player.pos.x += player.speedX * 2;
+			player.pos.y += player.speedY * 2;
+		}
+		else if (cos(player.angle) < 0.1 && sin(player.angle) > 0.1)
+		{
+			player.pos.x -= (player.speedX * -1.0);
 			player.pos.y += player.speedY;
 		}
-		else if (player.speedX > 0 && player.speedY < 1)
+		else if (cos(player.angle) > 0.1 && sin(player.angle) < 0.1 )
 		{
-			player.pos.x -= player.speedX;
-			player.pos.y += player.speedY;
-		}
-		else if (player.speedX < 0 && player.speedY > 1)
-		{
-			player.pos.x += player.speedX;
-			player.pos.y -= player.speedY;
+			player.pos.x -= player.speedX * 20;
+			player.pos.y += (player.speedY * -1.0) * 20;
 		}
 		else
 		{
-			if (player.speedX == 0 && player.speedY < 0)
-				player.pos.y += player.speedY;
-			else if (player.speedX == 0 && player.speedY > 0)
-				player.pos.y -= player.speedY;
-			else if (player.speedX < 0 && player.speedY == 0)
-				player.pos.x += player.speedX;
+			if (cos(player.angle) == 0.1 && sin(player.angle) < 0.1)
+				player.pos.y += player.generalSpeed;
+			else if (cos(player.angle) == 0.1 && sin(player.angle) > 0.1)
+				player.pos.y -= player.generalSpeed;
+			else if (cos(player.angle) < 0.1 && sin(player.angle) == 0.1)
+				player.pos.x += player.generalSpeed;
 			else
 				player.pos.x -= player.speedX;
 		}
@@ -68,99 +68,6 @@ void playerMovement(Player& player)
 	else if (player.pos.y > GetScreenHeight())
 		player.pos.y = 0;
 
-	//static Vector2 mousePosSaved[mousePosSavedAmount] = {};
-	//static int actualMousePosSaved = 0;
-	//static int mousePosSavedTimer = 0;
-
-	/*if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-		mousePos = GetMousePosition();*/
-
-	/*if (mousePosSavedTimer == 0)
-	{
-		if (actualMousePosSaved != mousePosSavedAmount - 1)
-		{
-			mousePosSaved[actualMousePosSaved] = mousePos;
-			mousePosSavedTimer = 100;
-			++actualMousePosSaved;
-		}
-		else
-		{
-			actualMousePosSaved = 0;
-			mousePosSaved[actualMousePosSaved] = mousePos;
-			mousePosSavedTimer = 100;
-			++actualMousePosSaved;
-		}
-	}
-
-	if (mousePosSavedTimer != 0)
-		--mousePosSavedTimer;*/
-
-	/*if (mousePos.x != 0 && mousePos.y != 0)
-	{
-		if (player.pos.x != mousePos.x || player.pos.y != mousePos.y)
-			if (player.pos.x + (player.width / 2.0f) > mousePos.x && player.pos.y + (player.height / 2.0f) > mousePos.y)
-			{
-				if (player.pos.x > 0 && player.pos.y > 0)
-				{
-					player.pos.x -= player.speed;
-					player.pos.y -= player.speed;
-				}
-			}
-			else if (player.pos.x + (player.width / 2.0f) < mousePos.x && player.pos.y + (player.height / 2.0f) < mousePos.y)
-			{
-				if (player.pos.x + player.width < windowWidth && player.pos.y + player.height < windowHeight)
-				{
-					player.pos.x += player.speed;
-					player.pos.y += player.speed;
-				}
-			}
-			else if (player.pos.x + (player.width / 2.0f) < mousePos.x && player.pos.y + (player.height / 2.0f) > mousePos.y)
-			{
-				if (player.pos.x + player.width < windowWidth && player.pos.y > 0)
-				{
-					player.pos.x += player.speed;
-					player.pos.y -= player.speed;
-				}
-			}
-			else if (player.pos.x + (player.width / 2.0f) > mousePos.x && player.pos.y + (player.height / 2.0f) < mousePos.y)
-			{
-				if (player.pos.x > 0 && player.pos.y + player.height < windowHeight)
-				{
-					player.pos.x -= player.speed;
-					player.pos.y += player.speed;
-				}
-			}
-			else if (player.pos.x + (player.width / 2.0f) > mousePos.x && player.pos.y + (player.height / 2.0f) == mousePos.y)
-			{
-				if (player.pos.x > 0)
-				{
-					player.pos.x -= player.speed;
-				}
-			}
-			else if (player.pos.x + (player.width / 2.0f) < mousePos.x && player.pos.y + (player.height / 2.0f) == mousePos.y)
-			{
-				if (player.pos.x + player.width < windowWidth)
-				{
-					player.pos.x += player.speed;
-				}
-			}
-			else if (player.pos.x + (player.width / 2.0f) == mousePos.x && player.pos.y + (player.height / 2.0f) > mousePos.y)
-			{
-				if (player.pos.y > 0)
-				{
-					player.pos.y -= player.speed;
-				}
-			}
-			else if (player.pos.x + (player.width / 2.0f) == mousePos.x && player.pos.y + (player.height / 2.0f) < mousePos.y)
-			{
-				if (player.pos.y + player.height < windowHeight)
-				{
-					player.pos.y += player.speed;
-				}
-			}
-	}*/
-
-	
 }
 
 void playerShooting(Player& player)
