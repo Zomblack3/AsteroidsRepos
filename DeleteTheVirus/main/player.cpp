@@ -7,12 +7,14 @@
 void playerMovement(Player& player)
 {
 	player.mousePos = GetMousePosition();
-	player.bullet.pos = player.pos;
 	float angleToMouse = atan2(player.mousePos.y - player.pos.y, player.mousePos.x - player.pos.x);
 	player.angle = angleToMouse;
 	//player.generalSpeed = 150.0f * GetFrameTime();
 	player.speedX = (player.angle * cos(player.angle)) * player.generalSpeed;
 	player.speedY = (player.angle * sin(player.angle)) * player.generalSpeed;
+
+	if (!player.isShooting)
+		player.bullet.pos = player.pos;
 
 	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 	{
@@ -57,41 +59,46 @@ void playerMovement(Player& player)
 
 }
 
-void playerShooting(Player& player)
+void playerShooting(Player& player, Bullet& bullet)
 {
-	player.bullet.speedX = (player.angle * cos(player.angle)) * player.bullet.generalSpeed;
-	player.bullet.speedY = (player.angle * sin(player.angle)) * player.bullet.generalSpeed;
+	/*player.bullet.speedX = (player.angle * cos(player.angle)) * player.bullet.generalSpeed;
+	player.bullet.speedY = (player.angle * sin(player.angle)) * player.bullet.generalSpeed;*/
 
-	if (player.bullet.reloadingTimer == 0.0f)
+	if (bullet.reloadingTimer <= 0.0f)
 	{
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
 		{
+			bullet.direction = player.angle;
+			bullet.speedX = player.speedX;
+			bullet.speedY = player.speedY;
+
 			if (player.ammo != 0)
 			{
 				player.isShooting = true;
-				player.bullet.reloadingTimer = 100.0f;
+				bullet.reloadingTimer = 1000.0f;
 			}
 		}
 	}
 
 	if (player.isShooting)
-		shoot(player);
+		shoot(bullet);
 	else
-		player.bullet.pos = player.pos;
+		bullet.pos = player.pos;
 
-	if (player.bullet.reloadingTimer != 0)
-		player.bullet.reloadingTimer -= 0.1;
+	if (bullet.reloadingTimer > 0)
+		bullet.reloadingTimer -= 0.1;
 	else
 		player.isShooting = false;
 }
 
-void shoot(Player& player)
+void shoot(Bullet& bullet)
 {
-	//float angleToMouse = atan2(player.mousePos.y - player.pos.y, player.mousePos.x - player.pos.x);
-	player.bullet.speedX = (player.angle * cos(player.angle)) * player.bullet.generalSpeed;
-	player.bullet.speedY = (player.angle * sin(player.angle)) * player.bullet.generalSpeed;
+	float angleToMouse = atan2(bullet.direction - bullet.pos.y, bullet.direction - bullet.pos.x);
+	bullet.angle = angleToMouse;
+	//player.bullet.speedX = (player.angle * cos(player.angle)) * player.bullet.generalSpeed;
+	//player.bullet.speedY = (player.angle * sin(player.angle)) * player.bullet.generalSpeed;
 
-	if (cos(player.angle) < 0.1 && sin(player.angle) < 0.1)
+	if (cos(bullet.angle) < 0.1 && sin(bullet.angle) < 0.1)
 	{
 		/*player.bullet.direction.x *= -1.0;
 		player.bullet.direction.y *= -1.0;
@@ -99,35 +106,35 @@ void shoot(Player& player)
 		player.bullet.pos.x -= player.bullet.direction.x;
 		player.bullet.pos.y -= player.bullet.direction.y;*/
 
-		player.bullet.pos.x -= player.bullet.speedX * 5;
-		player.bullet.pos.y -= player.bullet.speedY * 5;
+		bullet.pos.x -= bullet.speedX;
+		bullet.pos.y -= bullet.speedY;
 	}
-	else if (cos(player.angle) > 0.1 && sin(player.angle) > 0.1)
+	else if (cos(bullet.angle) > 0.1 && sin(bullet.angle) > 0.1)
 	{
 		/*player.bullet.pos.x += player.bullet.direction.x;
 		player.bullet.pos.y += player.bullet.direction.y;*/
 
-		player.bullet.pos.x += player.bullet.speedX * 5;
-		player.bullet.pos.y += player.bullet.speedY * 5;
+		bullet.pos.x += bullet.speedX;
+		bullet.pos.y += bullet.speedY;
 	}
-	else if (cos(player.angle) > 0.1 && sin(player.angle) < 0.1)
+	else if (cos(bullet.angle) > 0.1 && sin(bullet.angle) < 0.1)
 	{
 		/*player.bullet.direction.y *= -1.0;
 
 		player.bullet.pos.x += player.bullet.direction.x;
 		player.bullet.pos.y -= player.bullet.direction.y;*/
 
-		player.bullet.pos.x -= (player.bullet.speedX * -1.0) * 5;
-		player.bullet.pos.y += player.bullet.speedY * 5;
+		bullet.pos.x -= (bullet.speedX * -1.0);
+		bullet.pos.y += bullet.speedY;
 	}
-	else if (cos(player.angle) < 0.1 && sin(player.angle) > 0.1)
+	else if (cos(bullet.angle) < 0.1 && sin(bullet.angle) > 0.1)
 	{
 		/*player.bullet.direction.x *= -1.0;
 
 		player.bullet.pos.x -= player.bullet.direction.x;
 		player.bullet.pos.y += player.bullet.direction.y;*/
 
-		player.bullet.pos.x -= player.bullet.speedX * 5;
-		player.bullet.pos.y += (player.bullet.speedY * -1.0) * 5;
+		bullet.pos.x -= bullet.speedX;
+		bullet.pos.y += (bullet.speedY * -1.0);
 	}
 }

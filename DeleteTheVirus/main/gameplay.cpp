@@ -29,7 +29,7 @@ void gameplayDrawing(Player player)
 	if (player.isShooting)
 		DrawCircle(player.bullet.pos.x, player.bullet.pos.y, player.bullet.radius, RED);
 
-	//DrawLineV(player.pos, player.mousePos, WHITE);
+	//DrawLineV(player.bullet.pos, player.mousePos, WHITE);
 
 	EndDrawing();
 }
@@ -45,5 +45,5 @@ void playerUpdate(Player& player)
 {
 	playerMovement(player);
 
-	playerShooting(player);
+	playerShooting(player, player.bullet);
 }

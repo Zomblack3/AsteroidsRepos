@@ -7,7 +7,8 @@ struct Bullet
 	int width = 10;
 	int height = 10;
 	Vector2 pos = { };
-	Vector2 direction = GetMousePosition();
+	float direction = 0 /*GetMousePosition()*/;
+	float angle = 0;
 	float generalSpeed = 300.0f * GetFrameTime();
 	float speedX = 0;
 	float speedY = 0;
@@ -21,7 +22,7 @@ struct Player
 	Vector2 pos = { windowWidth / 2, windowHeight / 2 };
 	float angle = 0;
 	float radius = 15;
-	float generalSpeed = 150.0f * GetFrameTime();
+	float generalSpeed = 15.0f * GetFrameTime();
 	float speedX = 0;
 	float speedY = 0;
 	int lives = 3;
@@ -31,5 +32,5 @@ struct Player
 };
 
 void playerMovement(Player& player);
-void playerShooting(Player& player);
-void shoot(Player& player);
+void playerShooting(Player& player, Bullet& bullet);
+void shoot(Bullet& bullet);
