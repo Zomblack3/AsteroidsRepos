@@ -7,7 +7,7 @@ struct Bullet
 	int width = 10;
 	int height = 10;
 	Vector2 pos = { };
-	float direction = 0 /*GetMousePosition()*/;
+	Vector2 direction = { } /*GetMousePosition()*/;
 	float angle = 0;
 	float generalSpeed = 300.0f * GetFrameTime();
 	float speedX = 0;

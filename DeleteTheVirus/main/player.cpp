@@ -68,7 +68,7 @@ void playerShooting(Player& player, Bullet& bullet)
 	{
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
 		{
-			bullet.direction = player.angle;
+			bullet.direction = player.mousePos;
 			bullet.speedX = player.speedX;
 			bullet.speedY = player.speedY;
 
@@ -93,7 +93,7 @@ void playerShooting(Player& player, Bullet& bullet)
 
 void shoot(Bullet& bullet)
 {
-	float angleToMouse = atan2(bullet.direction - bullet.pos.y, bullet.direction - bullet.pos.x);
+	float angleToMouse = atan2(bullet.direction.y - bullet.pos.y, bullet.direction.x - bullet.pos.x);
 	bullet.angle = angleToMouse;
 	//player.bullet.speedX = (player.angle * cos(player.angle)) * player.bullet.generalSpeed;
 	//player.bullet.speedY = (player.angle * sin(player.angle)) * player.bullet.generalSpeed;
