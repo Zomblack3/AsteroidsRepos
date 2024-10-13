@@ -2,8 +2,18 @@
 
 #include "game.h"
 
+enum DIRECTION_SECTION
+{
+	CENTER,
+	I,
+	II,
+	III,
+	IV
+};
+
 struct Bullet
 {
+	DIRECTION_SECTION directionSection = CENTER;
 	int width = 10;
 	int height = 10;
 	Vector2 pos = { };
@@ -33,4 +43,4 @@ struct Player
 
 void playerMovement(Player& player);
 void playerShooting(Player& player, Bullet& bullet);
-void shoot(Bullet& bullet);
+void shoot(Bullet& bullet, float speedX, float speedY);

@@ -9,6 +9,8 @@ void playerMovement(Player& player)
 	player.mousePos = GetMousePosition();
 	float angleToMouse = atan2(player.mousePos.y - player.pos.y, player.mousePos.x - player.pos.x);
 	player.angle = angleToMouse;
+	float test1 = cos(player.angle);
+	float test2 = sin(player.angle);
 	//player.generalSpeed = 150.0f * GetFrameTime();
 	player.speedX = (player.angle * cos(player.angle)) * player.generalSpeed;
 	player.speedY = (player.angle * sin(player.angle)) * player.generalSpeed;
@@ -61,8 +63,10 @@ void playerMovement(Player& player)
 
 void playerShooting(Player& player, Bullet& bullet)
 {
-	/*player.bullet.speedX = (player.angle * cos(player.angle)) * player.bullet.generalSpeed;
-	player.bullet.speedY = (player.angle * sin(player.angle)) * player.bullet.generalSpeed;*/
+	float angleToMouse = atan2(bullet.direction.y - bullet.pos.y, bullet.direction.x - bullet.pos.x);
+	bullet.angle = angleToMouse;
+	float speedX = cos(bullet.angle);
+	float speedY = sin(bullet.angle);
 
 	if (bullet.reloadingTimer <= 0.0f)
 	{
@@ -71,6 +75,15 @@ void playerShooting(Player& player, Bullet& bullet)
 			bullet.direction = player.mousePos;
 			bullet.speedX = player.speedX;
 			bullet.speedY = player.speedY;
+
+			if (speedX < 0.1 && speedY < 0.1)
+				bullet.directionSection = III;
+			else if (speedX > 0.1 && speedY > 0.1)
+				bullet.directionSection = II;
+			else if (speedX > 0.1 && speedY < 0.1)
+				bullet.directionSection = I;
+			else if (speedX < 0.1 && speedY > 0.1)
+				bullet.directionSection = IV;
 
 			if (player.ammo != 0)
 			{
@@ -81,7 +94,7 @@ void playerShooting(Player& player, Bullet& bullet)
 	}
 
 	if (player.isShooting)
-		shoot(bullet);
+		shoot(bullet, speedX, speedY);
 	else
 		bullet.pos = player.pos;
 
@@ -91,50 +104,72 @@ void playerShooting(Player& player, Bullet& bullet)
 		player.isShooting = false;
 }
 
-void shoot(Bullet& bullet)
+void shoot(Bullet& bullet, float speedX, float speedY)
 {
-	float angleToMouse = atan2(bullet.direction.y - bullet.pos.y, bullet.direction.x - bullet.pos.x);
-	bullet.angle = angleToMouse;
+	/*float angleToMouse = atan2(bullet.direction.y - bullet.pos.y, bullet.direction.x - bullet.pos.x);
+	bullet.angle = angleToMouse;*/
 	//player.bullet.speedX = (player.angle * cos(player.angle)) * player.bullet.generalSpeed;
 	//player.bullet.speedY = (player.angle * sin(player.angle)) * player.bullet.generalSpeed;
 
-	if (cos(bullet.angle) < 0.1 && sin(bullet.angle) < 0.1)
+	/*if (test1 < 0.1 && test2 < 0.1)
 	{
-		/*player.bullet.direction.x *= -1.0;
-		player.bullet.direction.y *= -1.0;
-
-		player.bullet.pos.x -= player.bullet.direction.x;
-		player.bullet.pos.y -= player.bullet.direction.y;*/
-
-		bullet.pos.x -= bullet.speedX;
-		bullet.pos.y -= bullet.speedY;
+		bullet.pos.x -= test1 * -1.0;
+		bullet.pos.y -= test2 * -1.0;
 	}
-	else if (cos(bullet.angle) > 0.1 && sin(bullet.angle) > 0.1)
+	else if (test1 > 0.1 && test2 > 0.1)
 	{
-		/*player.bullet.pos.x += player.bullet.direction.x;
-		player.bullet.pos.y += player.bullet.direction.y;*/
-
-		bullet.pos.x += bullet.speedX;
-		bullet.pos.y += bullet.speedY;
+		bullet.pos.x += test1;
+		bullet.pos.y += test2;
 	}
-	else if (cos(bullet.angle) > 0.1 && sin(bullet.angle) < 0.1)
+	else if (test1 > 0.1 && test2 < 0.1)
 	{
-		/*player.bullet.direction.y *= -1.0;
-
-		player.bullet.pos.x += player.bullet.direction.x;
-		player.bullet.pos.y -= player.bullet.direction.y;*/
-
-		bullet.pos.x -= (bullet.speedX * -1.0);
-		bullet.pos.y += bullet.speedY;
+		bullet.pos.x -= test1 * -1.0;
+		bullet.pos.y += test2;
 	}
-	else if (cos(bullet.angle) < 0.1 && sin(bullet.angle) > 0.1)
+	else if (test1 < 0.1 && test2 > 0.1)
 	{
-		/*player.bullet.direction.x *= -1.0;
+		bullet.pos.x -= test1 * -1.0;
+		bullet.pos.y += test2;
+	}*/
 
-		player.bullet.pos.x -= player.bullet.direction.x;
-		player.bullet.pos.y += player.bullet.direction.y;*/
+	/*if (test1 < 0.1 && test2 < 0.1)
+		bullet.directionSection = III;
+	else if (test1 > 0.1 && test2 > 0.1)
+		bullet.directionSection = II;
+	else if (test1 > 0.1 && test2 < 0.1)
+		bullet.directionSection = I;
+	else if (test1 < 0.1 && test2 > 0.1)
+		bullet.directionSection = IV;*/
 
-		bullet.pos.x -= bullet.speedX;
-		bullet.pos.y += (bullet.speedY * -1.0);
+	switch (bullet.directionSection)
+	{
+	case CENTER:
+		break;
+	case I:
+
+		bullet.pos.x += speedX;
+		bullet.pos.y += speedY;
+
+		break;
+	case II:
+
+		bullet.pos.x -= speedX * -1.0;
+		bullet.pos.y += speedY;
+
+		break;
+	case III:
+
+		bullet.pos.x -= speedX * -1.0;
+		bullet.pos.y -= speedY * -1.0;
+
+		break;
+	case IV:
+
+		bullet.pos.x -= speedX * -1.0;
+		bullet.pos.y += speedY;
+
+		break;
+	default:
+		break;
 	}
 }

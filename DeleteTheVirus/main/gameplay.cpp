@@ -31,6 +31,8 @@ void gameplayDrawing(Player player)
 
 	//DrawLineV(player.bullet.pos, player.mousePos, WHITE);
 
+	//DrawText(TextFormat("%f", player.mousePos), 0, 0, 10, WHITE);
+
 	EndDrawing();
 }
 
