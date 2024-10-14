@@ -1,7 +1,7 @@
+#include "gameplay.h"
+
 #include "raylib.h"
 #include <iostream>
-
-#include "gameplay.h"
 
 void gameplay(ACTUAL_SCREEN& actualScreen)
 {

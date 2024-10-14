@@ -1,6 +1,6 @@
-#include "raylib.h"
-
 #include "mainMenu.h"
+
+#include "raylib.h"
 
 void mainMenu(ACTUAL_SCREEN& actualScreen)
 {

@@ -1,8 +1,7 @@
-#include "raylib.h"
-
-#include <math.h>
-
 #include "player.h"
+
+#include "raylib.h"
+#include <math.h>
 
 void playerMovement(Player& player)
 {
