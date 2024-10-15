@@ -1,7 +1,5 @@
 #include "enemys.h"
 
-#include "raylib.h"
-
 Virus createVirus()
 {
 	Virus virus;
