@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include "game.h"
 #include "player.h"
 

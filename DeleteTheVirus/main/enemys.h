@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game.h"
+#include "raylib.h"
 
 struct Virus
 {
@@ -8,9 +9,9 @@ struct Virus
     float minSpeed = -10.0;
     int maxSize = 10;
     int minSize = 5;
-    Vector2 pos;
-    Vector2 speed;
-    float radius;
+    Vector2 pos = { };
+    Vector2 speed = { };
+    float radius = 0;
 };
 
 Virus createVirus();

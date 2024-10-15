@@ -8,11 +8,8 @@ void playerMovement(Player& player)
 	player.mousePos = GetMousePosition();
 	float angleToMouse = atan2(player.mousePos.y - player.pos.y, player.mousePos.x - player.pos.x);
 	player.angle = angleToMouse;
-	float test1 = cos(player.angle);
-	float test2 = sin(player.angle);
-	//player.generalSpeed = 150.0f * GetFrameTime();
-	player.speedX = (player.angle * cos(player.angle)) * player.generalSpeed;
-	player.speedY = (player.angle * sin(player.angle)) * player.generalSpeed;
+	player.speedX = cos(player.angle) * player.generalSpeed;
+	player.speedY = sin(player.angle) * player.generalSpeed;
 
 	if (!player.isShooting)
 		player.bullet.pos = player.pos;
@@ -21,23 +18,23 @@ void playerMovement(Player& player)
 	{
 		if (cos(player.angle) < 0.1 && sin(player.angle) < 0.1)
 		{
-			player.pos.x -= player.speedX;
-			player.pos.y -= player.speedY;
+			player.pos.x -= (player.speedX * -1.0) * player.generalSpeed;
+			player.pos.y -= (player.speedY * -1.0) * player.generalSpeed;
 		}
 		else if (cos(player.angle) > 0.1 && sin(player.angle) > 0.1)
 		{
-			player.pos.x += player.speedX * 4;
-			player.pos.y += player.speedY * 4;
+			player.pos.x += player.speedX * player.generalSpeed;
+			player.pos.y += player.speedY * player.generalSpeed;
 		}
 		else if (cos(player.angle) < 0.1 && sin(player.angle) > 0.1)
 		{
-			player.pos.x -= (player.speedX * -1.0);
-			player.pos.y += player.speedY;
+			player.pos.x -= (player.speedX * -1.0) * player.generalSpeed;
+			player.pos.y += player.speedY * player.generalSpeed;
 		}
 		else if (cos(player.angle) > 0.1 && sin(player.angle) < 0.1 )
 		{
-			player.pos.x -= player.speedX * 4;
-			player.pos.y += (player.speedY * -1.0) * 4;
+			player.pos.x -= (player.speedX * -1.0) * player.generalSpeed;
+			player.pos.y += player.speedY * player.generalSpeed;
 		}
 	}
 	else
@@ -62,18 +59,18 @@ void playerMovement(Player& player)
 
 void playerShooting(Player& player, Bullet& bullet)
 {
+	bullet.direction = player.mousePos;
 	float angleToMouse = atan2(bullet.direction.y - bullet.pos.y, bullet.direction.x - bullet.pos.x);
 	bullet.angle = angleToMouse;
-	float speedX = cos(bullet.angle);
-	float speedY = sin(bullet.angle);
+	static float speedX = 0;
+	static float speedY = 0;
 
 	if (bullet.reloadingTimer <= 0.0f)
 	{
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
 		{
-			bullet.direction = player.mousePos;
-			bullet.speedX = player.speedX;
-			bullet.speedY = player.speedY;
+			speedX = cos(bullet.angle);
+			speedY = sin(bullet.angle);
 
 			if (speedX < 0.1 && speedY < 0.1)
 				bullet.directionSection = III;
@@ -87,7 +84,7 @@ void playerShooting(Player& player, Bullet& bullet)
 			if (player.ammo != 0)
 			{
 				player.isShooting = true;
-				bullet.reloadingTimer = 1000.0f;
+				bullet.reloadingTimer = 100.0f;
 			}
 		}
 	}
@@ -105,41 +102,6 @@ void playerShooting(Player& player, Bullet& bullet)
 
 void shoot(Bullet& bullet, float speedX, float speedY)
 {
-	/*float angleToMouse = atan2(bullet.direction.y - bullet.pos.y, bullet.direction.x - bullet.pos.x);
-	bullet.angle = angleToMouse;*/
-	//player.bullet.speedX = (player.angle * cos(player.angle)) * player.bullet.generalSpeed;
-	//player.bullet.speedY = (player.angle * sin(player.angle)) * player.bullet.generalSpeed;
-
-	/*if (test1 < 0.1 && test2 < 0.1)
-	{
-		bullet.pos.x -= test1 * -1.0;
-		bullet.pos.y -= test2 * -1.0;
-	}
-	else if (test1 > 0.1 && test2 > 0.1)
-	{
-		bullet.pos.x += test1;
-		bullet.pos.y += test2;
-	}
-	else if (test1 > 0.1 && test2 < 0.1)
-	{
-		bullet.pos.x -= test1 * -1.0;
-		bullet.pos.y += test2;
-	}
-	else if (test1 < 0.1 && test2 > 0.1)
-	{
-		bullet.pos.x -= test1 * -1.0;
-		bullet.pos.y += test2;
-	}*/
-
-	/*if (test1 < 0.1 && test2 < 0.1)
-		bullet.directionSection = III;
-	else if (test1 > 0.1 && test2 > 0.1)
-		bullet.directionSection = II;
-	else if (test1 > 0.1 && test2 < 0.1)
-		bullet.directionSection = I;
-	else if (test1 < 0.1 && test2 > 0.1)
-		bullet.directionSection = IV;*/
-
 	switch (bullet.directionSection)
 	{
 	case CENTER:

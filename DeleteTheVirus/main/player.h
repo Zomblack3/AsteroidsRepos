@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game.h"
+#include "raylib.h"
 
 enum DIRECTION_SECTION
 {
@@ -17,8 +18,7 @@ struct Bullet
 	int width = 10;
 	int height = 10;
 	Vector2 pos = { };
-	Vector2 direction = { } /*GetMousePosition()*/;
-	Vector2 speed = { }; // Change later
+	Vector2 direction = { };
 	float angle = 0;
 	float generalSpeed = 300.0f * GetFrameTime();
 	float speedX = 0;
@@ -29,12 +29,13 @@ struct Bullet
 
 struct Player
 {
-	Vector2 mousePos = GetMousePosition();
+	DIRECTION_SECTION directionSection = CENTER;
+	Vector2 mousePos = { };
 	Vector2 pos = { windowWidth / 2, windowHeight / 2 };
 	Vector2 speed = { }; // Change later
 	float angle = 0;
 	float radius = 15;
-	float generalSpeed = 15.0f * GetFrameTime();
+	float generalSpeed = 500.0f * GetFrameTime();
 	float speedX = 0;
 	float speedY = 0;
 	int lives = 3;
