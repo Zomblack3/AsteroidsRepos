@@ -9,10 +9,13 @@
 namespace run
 {
 	ACTUAL_SCREEN actualScreen = MAIN_MENU;
+	Button buttons[amountButtons];
 
 	void game()
 	{
 		InitWindow(windowWidth, windowHeight, "DELETE THE VIRUS");
+
+		mainMenuDrawing(buttons);
 
 		while (!WindowShouldClose())
 		{

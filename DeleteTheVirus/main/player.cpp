@@ -4,54 +4,123 @@
 
 void playerMovement(Player& player)
 {
+	player.generalSpeed = player.baseSpeed;
+	float delta = GetFrameTime();
 	player.mousePos = GetMousePosition();
 	float angleToMouse = atan2(player.mousePos.y - player.pos.y, player.mousePos.x - player.pos.x);
 	player.angle = angleToMouse;
-	player.speedX = cos(player.angle) * player.generalSpeed;
-	player.speedY = sin(player.angle) * player.generalSpeed;
+	player.directionX = cos(player.angle);
+	player.directionY = sin(player.angle);
+	static float constDirectionX = 0;
+	static float constDirectionY = 0;
 
 	if (!player.isShooting)
 		player.bullet.pos = player.pos;
 
 	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 	{
+		if (player.baseSpeed == 0)
+			player.baseSpeed = player.minSpeed;
+
 		if (cos(player.angle) < 0.1 && sin(player.angle) < 0.1)
 		{
-			player.pos.x -= (player.speedX * -1.0) * player.generalSpeed;
-			player.pos.y -= (player.speedY * -1.0) * player.generalSpeed;
+			/*player.pos.x -= (player.speedX * -1.0) * player.generalSpeed;
+			player.pos.y -= (player.speedY * -1.0) * player.generalSpeed;*/
+
+			constDirectionX = player.directionX;
+			constDirectionY = player.directionY;
+
+			if (player.baseSpeed < player.maxSpeed)
+				player.baseSpeed += 0.1;
+
+			player.directionSection = III;
 		}
 		else if (cos(player.angle) > 0.1 && sin(player.angle) > 0.1)
 		{
-			player.pos.x += player.speedX * player.generalSpeed;
-			player.pos.y += player.speedY * player.generalSpeed;
+			/*player.pos.x += player.speedX * player.generalSpeed;
+			player.pos.y += player.speedY * player.generalSpeed;*/
+
+			constDirectionX = player.directionX;
+			constDirectionY = player.directionY;
+
+			if (player.baseSpeed < player.maxSpeed)
+				player.baseSpeed += 0.1;
+
+			player.directionSection = I;
 		}
 		else if (cos(player.angle) < 0.1 && sin(player.angle) > 0.1)
 		{
-			player.pos.x -= (player.speedX * -1.0) * player.generalSpeed;
-			player.pos.y += player.speedY * player.generalSpeed;
+			/*player.pos.x -= (player.speedX * -1.0) * player.generalSpeed;
+			player.pos.y += player.speedY * player.generalSpeed;*/
+
+			constDirectionX = player.directionX;
+			constDirectionY = player.directionY;
+
+			if (player.baseSpeed < player.maxSpeed)
+				player.baseSpeed += 0.1;
+
+			player.directionSection = II;
 		}
 		else if (cos(player.angle) > 0.1 && sin(player.angle) < 0.1 )
 		{
-			player.pos.x -= (player.speedX * -1.0) * player.generalSpeed;
-			player.pos.y += player.speedY * player.generalSpeed;
+			/*player.pos.x -= (player.speedX * -1.0) * player.generalSpeed;
+			player.pos.y += player.speedY * player.generalSpeed;*/
+
+			constDirectionX = player.directionX;
+			constDirectionY = player.directionY;
+
+			if (player.baseSpeed < player.maxSpeed)
+				player.baseSpeed += 0.1;
+
+			player.directionSection = IV;
 		}
 	}
 	else
 	{
-		if (player.speedX > 0)
-			player.speedX -= 0.1f;
+		if (player.baseSpeed > player.minSpeed)
+			player.baseSpeed -= 0.1f;
+	}
 
-		if (player.speedY > 0)
-			player.speedY -= 0.1f;
+	switch (player.directionSection)
+	{
+	case CENTER:
+		break;
+	case I:
+
+		player.pos.x += constDirectionX * (player.generalSpeed * delta);
+		player.pos.y += constDirectionY * (player.generalSpeed * delta);
+
+		break;
+	case II:
+
+		player.pos.x -= (constDirectionX * -1.0) * (player.generalSpeed * delta);
+		player.pos.y += constDirectionY * (player.generalSpeed * delta);
+
+		break;
+	case III:
+
+		player.pos.x -= (constDirectionX * -1.0) * (player.generalSpeed * delta);
+		player.pos.y -= (constDirectionY * -1.0) * (player.generalSpeed * delta);
+
+		break;
+	case IV:
+
+		player.pos.x -= (constDirectionX * -1.0) * (player.generalSpeed * delta);
+		player.pos.y += constDirectionY * (player.generalSpeed * delta);
+
+		break;
+	default:
+		break;
 	}
 
 	if (player.pos.x < 0)
-		player.pos.x = GetScreenWidth();
-	else if (player.pos.x > GetScreenWidth()) 
+		player.pos.x = windowWidth;
+	else if (player.pos.x > windowWidth) 
 		player.pos.x = 0;
+
 	if (player.pos.y < 0)
-		player.pos.y = GetScreenHeight();
-	else if (player.pos.y > GetScreenHeight())
+		player.pos.y = windowHeight;
+	else if (player.pos.y > windowHeight)
 		player.pos.y = 0;
 
 }

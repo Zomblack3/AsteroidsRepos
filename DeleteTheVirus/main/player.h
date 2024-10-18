@@ -15,12 +15,10 @@ enum DIRECTION_SECTION
 struct Bullet
 {
 	DIRECTION_SECTION directionSection = CENTER;
-	int width = 10;
-	int height = 10;
 	Vector2 pos = { };
 	Vector2 direction = { };
 	float angle = 0;
-	float generalSpeed = 300.0f * GetFrameTime();
+	float generalSpeed = 300.0f;
 	float speedX = 0;
 	float speedY = 0;
 	float radius = 5;
@@ -35,9 +33,12 @@ struct Player
 	Vector2 speed = { }; // Change later
 	float angle = 0;
 	float radius = 15;
-	float generalSpeed = 500.0f * GetFrameTime();
-	float speedX = 0;
-	float speedY = 0;
+	float minSpeed = 250.0f;
+	float maxSpeed = 1000.0f;
+	float baseSpeed = 0;
+	float generalSpeed = 0;
+	float directionX = 0;
+	float directionY = 0;
 	int lives = 3;
 	int ammo = 10;
 	bool isShooting = false;

@@ -1,8 +1,5 @@
 #include "gameplay.h"
 
-#include "raylib.h"
-#include <iostream>
-
 void gameplay(ACTUAL_SCREEN& actualScreen)
 {
 	static Player player;
@@ -24,7 +21,13 @@ void gameplayDrawing(Player player)
 
 	ClearBackground(BLACK);
 
+#ifdef _DEBUG
+	DrawFPS(0, 0);
+
+	DrawText(TextFormat("%f", player.generalSpeed), 0, 20, 10, WHITE);
+
 	DrawCircle(player.pos.x, player.pos.y, player.radius, WHITE);
+#endif // _DEBUG
 
 	if (player.isShooting)
 		DrawCircle(player.bullet.pos.x, player.bullet.pos.y, player.bullet.radius, RED);
