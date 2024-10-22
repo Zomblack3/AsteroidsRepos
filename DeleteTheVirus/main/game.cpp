@@ -1,21 +1,19 @@
 #include "game.h"
 
-#include "raylib.h"
-#include <iostream>
-
 #include "mainMenu.h"
 #include "gameplay.h"
 
 namespace run
 {
 	ACTUAL_SCREEN actualScreen = MAIN_MENU;
-	Button buttons[amountButtons];
+	Rectangle buttons[amountButtons];
+	Color buttonState[amountButtons];
 
 	void game()
 	{
 		InitWindow(windowWidth, windowHeight, "DELETE THE VIRUS");
 
-		mainMenuDrawing(buttons);
+		mainMenuDrawing(buttons, buttonState);
 
 		while (!WindowShouldClose())
 		{
@@ -23,7 +21,7 @@ namespace run
 			{
 			case MAIN_MENU:
 
-				mainMenu(actualScreen);
+				mainMenu(actualScreen, buttons, buttonState);
 
 				break;
 			case GAMEPLAY:
@@ -35,5 +33,10 @@ namespace run
 				break;
 			}
 		}
+	}
+
+	void createButtons()
+	{
+
 	}
 }

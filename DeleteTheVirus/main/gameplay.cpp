@@ -10,9 +10,9 @@ void gameplay(ACTUAL_SCREEN& actualScreen)
 		asteroids[i].radius = rand() % (maxAsteroidRadius - minAsteroidRadius) + (minAsteroidRadius + 1);
 	}*/
 
-	gameplayDrawing(player);
-
 	gameplayUpdates(player);
+
+	gameplayDrawing(player);
 }
 
 void gameplayDrawing(Player player)

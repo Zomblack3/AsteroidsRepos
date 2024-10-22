@@ -5,18 +5,19 @@
 #include <iostream>
 #include "raylib.h"
 
-struct Button
-{
-	std::string name = "Unnamed";
-	float width = 50;
-	float height = 25;
-	bool isPressed = false;
-	Vector2 pos;
-};
+//struct Button
+//{
+//	float width = 50;
+//	float height = 25;
+//	Rectangle border = { 50, 25 };
+//	Vector2 pos;
+//	Color state;
+//	bool isPressed = false;
+//};
 
 const int amountButtons = 3;
 
-void mainMenu(ACTUAL_SCREEN& actualScreen);
-void buttonsCreator(Button buttons[]);
-void mainMenuDrawing(Button buttons[]);
-void mainMenuInputs(ACTUAL_SCREEN& actualScreen, Button buttons[]);
+void mainMenu(ACTUAL_SCREEN& actualScreen, Rectangle buttons[], Color buttonState[]);
+void buttonsCreator(Rectangle buttons[]);
+void mainMenuDrawing(Rectangle buttons[], Color buttonState[]);
+void mainMenuInputs(ACTUAL_SCREEN& actualScreen, Rectangle buttons[], Color buttonState[]);

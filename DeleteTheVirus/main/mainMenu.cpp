@@ -1,54 +1,72 @@
 #include "mainMenu.h"
 
-void mainMenu(ACTUAL_SCREEN& actualScreen)
+void mainMenu(ACTUAL_SCREEN& actualScreen, Rectangle buttons[], Color buttonState[])
 {
-	Button buttons[amountButtons];
 	static bool areButtonsCreated = false;
 
 	if (!areButtonsCreated)
 		buttonsCreator(buttons);
 
-	mainMenuDrawing(buttons);
+	mainMenuInputs(actualScreen, buttons, buttonState);
 
-	mainMenuInputs(actualScreen, buttons);
+	if (!WindowShouldClose())
+		mainMenuDrawing(buttons, buttonState);
 }
 
-void buttonsCreator(Button buttons[])
+void buttonsCreator(Rectangle buttons[])
 {
-	std::string buttonsNames[amountButtons] = { "start", "credits", "exit" };
-
 	int buttonDistance = 40;
+	float posY = windowHeight / 2;
 
 	for (int i = 0; i < amountButtons; i++)
 	{
-		Vector2 buttonsPos = { (windowWidth / 2) - buttons[i].width, windowHeight / 2 };
-		buttons[i].name = buttonsNames[i];
-		buttons[i].pos = buttonsPos;
-		buttons[i].pos.y += buttonDistance * i;
+		buttons[i].x = (windowWidth / 2) - 20;
+		buttons[i].y = posY + (buttonDistance * i);
+		buttons[i].width = 75;
+		buttons[i].height = 25;
 	}
 }
 
-void mainMenuDrawing(Button buttons[])
+void mainMenuDrawing(Rectangle buttons[], Color buttonState[])
 {
 	BeginDrawing();
 
 	ClearBackground(BLACK);
 
-	//DrawText("Presione ENTER para iniciar", (windowWidth / 2) - 160, windowHeight / 2, 25, WHITE);
+	DrawText("DELETE THE VIRUS", (windowWidth / 2) - 250, (windowHeight / 2) - (windowHeight / 4), 50, WHITE);
 
 	for (int i = 0; i < amountButtons; i++)
 	{
-		DrawRectangle(buttons[i].pos.x, buttons[i].pos.y, buttons[i].width, buttons[i].height, RED);
+		DrawRectangle(buttons[i].x, buttons[i].y, buttons[i].width, buttons[i].height, buttonState[i]);
 	}
+
+	DrawText("START", buttons[0].x + 5, buttons[0].y + 5, buttons[0].height - 10, WHITE);
+
+	DrawText("CREDITS", buttons[1].x + 5, buttons[1].y + 5, buttons[1].height - 10, WHITE);
+
+	DrawText("EXIT", buttons[2].x + 5, buttons[2].y + 5, buttons[2].height - 10, WHITE);
 
 	EndDrawing();
 }
 
-void mainMenuInputs(ACTUAL_SCREEN& actualScreen, Button buttons[])
+void mainMenuInputs(ACTUAL_SCREEN& actualScreen, Rectangle buttons[], Color buttonState[])
 {
-	if (IsKeyPressed(KEY_ENTER))
-		actualScreen = GAMEPLAY;
+	for (int i = 0; i < amountButtons; i++)
+	{
+		if (CheckCollisionPointRec(GetMousePosition(), buttons[i]))
+			buttonState[i] = BLUE;
+		else
+			buttonState[i] = RED;
+	}
 
-	if (IsKeyPressed(KEY_S))
-		CloseWindow();
+	if (CheckCollisionPointRec(GetMousePosition(), buttons[0]))
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+			actualScreen = GAMEPLAY;
+
+	if (CheckCollisionPointRec(GetMousePosition(), buttons[2]))
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+			CloseWindow();
+
+	/*if (IsKeyPressed(KEY_S))
+		CloseWindow();*/
 }
