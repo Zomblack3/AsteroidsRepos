@@ -1,6 +1,7 @@
 #include "game.h"
 
 #include "mainMenu.h"
+#include "credits.h"
 #include "gameplay.h"
 
 namespace run
@@ -22,6 +23,11 @@ namespace run
 			case MAIN_MENU:
 
 				mainMenu(actualScreen, buttons, buttonState);
+
+				break;
+			case CREDITS:
+
+				credits(actualScreen);
 
 				break;
 			case GAMEPLAY:
