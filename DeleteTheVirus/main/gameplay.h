@@ -14,9 +14,11 @@ struct Asteroids
 };
 
 void gameplay(ACTUAL_SCREEN& actualScreen);
-void gameplayDrawing(Player player);
-void gameplayUpdates(Player& player);
+void gameplayDrawing(Player player, Texture2D& shipTexture);
+void gameplayUpdates(Player& player, Texture2D shipTexture, Image shipGif);
 void playerUpdate(Player& player);
+void textureUpdate(Texture2D shipTexture, Image shipGif);
+void loadTextures(Texture2D& shipTexture, Image& shipGif);
 
 const int maxAsteroidRadius = 20;
 const int minAsteroidRadius = 5;

@@ -15,13 +15,18 @@ void drawCredits()
 
 	ClearBackground(BLACK);
 
-	DrawText("Game created by Santiago Britos", (windowWidth / 2) - 150, (windowHeight / 2) - 100, 20, WHITE);
+	DrawText("CREDITS", (windowWidth / 2) - 50, (windowHeight / 2) - 200, 30, GREEN);
 
-	DrawText("Library: Raylib.h", (windowWidth / 2) - 50, (windowHeight / 2) - 50, 20, WHITE);
+	//I
+	DrawText("Game created by Santiago Britos", (windowWidth / 2) - 150, (windowHeight / 2) - 150, 20, WHITE);
+
+	//Librarys
+	DrawText("Library: Raylib.h", (windowWidth / 2) - 50, (windowHeight / 2) - 100, 20, WHITE);
 
 	//Audio
 
 	//Textures
+	DrawText("Textures by Milagros Gubert, Santiago Britos", (windowWidth / 2) - 215, (windowHeight / 2) + 100, 20, WHITE);
 
 	EndDrawing();
 }

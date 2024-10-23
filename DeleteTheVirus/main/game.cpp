@@ -40,9 +40,4 @@ namespace run
 			}
 		}
 	}
-
-	void createButtons()
-	{
-
-	}
 }
