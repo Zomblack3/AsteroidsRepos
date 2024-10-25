@@ -47,5 +47,5 @@ struct Player
 };
 
 void playerMovement(Player& player);
-void playerShooting(Player& player, Bullet& bullet);
+void playerShooting(Player& player, Sound shootSound, Bullet& bullet);
 void shoot(Bullet& bullet, float speedX, float speedY);

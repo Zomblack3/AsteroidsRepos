@@ -14,6 +14,8 @@ namespace run
 	{
 		InitWindow(windowWidth, windowHeight, "DELETE THE VIRUS");
 
+		InitAudioDevice();
+
 		mainMenuDrawing(buttons, buttonState);
 
 		while (!WindowShouldClose())
@@ -39,5 +41,7 @@ namespace run
 				break;
 			}
 		}
+
+		CloseAudioDevice();
 	}
 }

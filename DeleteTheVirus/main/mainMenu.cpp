@@ -35,8 +35,6 @@ void mainMenuDrawing(Rectangle buttons[], Color buttonState[])
 
 	ClearBackground(BLACK);
 
-	std::string Text = "HOLA!ª!!!";
-
 	DrawText("DELETE THE VIRUS", (windowWidth / 2) - 250, (windowHeight / 2) - (windowHeight / 4), 50, WHITE);
 
 	for (int i = 0; i < amountButtons; i++)

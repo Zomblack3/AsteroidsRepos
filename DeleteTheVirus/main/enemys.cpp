@@ -3,9 +3,9 @@
 Virus createVirus()
 {
 	Virus virus;
-	virus.pos = { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight()) };
-	virus.speed = { (float)(GetRandomValue(virus.minSpeed, virus.maxSpeed) / 10.0), (float)(GetRandomValue(virus.minSpeed, virus.maxSpeed) / 10.0) };
-	virus.radius = (float)GetRandomValue(virus.minSize, virus.maxSize);
+    virus.pos = { static_cast <float> (GetRandomValue(0, GetScreenWidth())), static_cast <float> (GetRandomValue(0, GetScreenHeight())) };
+	virus.speed = { static_cast <float> (GetRandomValue(virus.minSpeed, virus.maxSpeed) / 10.0), static_cast <float> (GetRandomValue(virus.minSpeed, virus.maxSpeed) / 10.0) };
+    virus.radius = static_cast <float> (GetRandomValue(virus.minSize, virus.maxSize));
 
 	return virus;
 }

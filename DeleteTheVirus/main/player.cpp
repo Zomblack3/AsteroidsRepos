@@ -125,13 +125,14 @@ void playerMovement(Player& player)
 
 }
 
-void playerShooting(Player& player, Bullet& bullet)
+void playerShooting(Player& player, Sound shootSound, Bullet& bullet)
 {
 	bullet.direction = player.mousePos;
 	float angleToMouse = atan2(bullet.direction.y - bullet.pos.y, bullet.direction.x - bullet.pos.x);
 	bullet.angle = angleToMouse;
 	static float speedX = 0;
 	static float speedY = 0;
+	static bool soundPlayed = false;
 
 	if (bullet.reloadingTimer <= 0.0f)
 	{
@@ -158,14 +159,27 @@ void playerShooting(Player& player, Bullet& bullet)
 	}
 
 	if (player.isShooting)
+	{
 		shoot(bullet, speedX, speedY);
+
+		if (!soundPlayed)
+		{
+			PlaySound(shootSound);
+
+			soundPlayed = true;
+		}
+	}
 	else
 		bullet.pos = player.pos;
 
 	if (bullet.reloadingTimer > 0)
 		bullet.reloadingTimer -= 0.1;
 	else
+	{
 		player.isShooting = false;
+
+		soundPlayed = false;
+	}
 }
 
 void shoot(Bullet& bullet, float speedX, float speedY)

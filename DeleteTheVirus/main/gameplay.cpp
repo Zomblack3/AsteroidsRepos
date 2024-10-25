@@ -4,47 +4,50 @@ void gameplay(ACTUAL_SCREEN& actualScreen)
 {
 	static int startTimer = 200;
 	int animFrames = 0;
-	static bool areTexturesLoad = false;
+	static bool areExtArchivesLoad = false;
 
 	static Player player;
 	Asteroids asteroids[asteroidsAmount];
 	static Image shipGif;
 	static Texture2D shipTexture;
+	static Texture2D screenBoarder;
+	static Sound shootSound;
 
 	/*for (int i = 0; i < asteroidsAmount; i++)
 	{
 		asteroids[i].radius = rand() % (maxAsteroidRadius - minAsteroidRadius) + (minAsteroidRadius + 1);
 	}*/
 
-	if (!areTexturesLoad)
+	if (!areExtArchivesLoad)
 	{
-		loadTextures(shipTexture, shipGif);
+		loadTextures(shipTexture, shipGif, screenBoarder);
 
-		areTexturesLoad = true;
+		loadAudio(shootSound);
+
+		areExtArchivesLoad = true;
 	}
 
 	if (startTimer == 0)
-		gameplayUpdates(player, shipTexture, shipGif);
+		gameplayUpdates(player, shipTexture, shipGif, shootSound);
 	else
 		--startTimer;
 
-	gameplayDrawing(player, shipTexture);
+	gameplayDrawing(player, shipTexture, screenBoarder);
 
 	if (WindowShouldClose())
 	{
 		UnloadTexture(shipTexture);
 		UnloadImage(shipGif);
 	}
-	//Cuando tengas la pausa metelo en el salir
-	/*UnloadTexture(shipTexture);
-	UnloadImage(shipGif);*/
 }
 
-void gameplayDrawing(Player player, Texture2D& shipTexture)
+void gameplayDrawing(Player player, Texture2D& shipTexture, Texture2D screenBorder)
 {
 	BeginDrawing();
 
 	ClearBackground(BLACK);
+
+	DrawTexture(screenBorder, 0, 0, WHITE);
 
 #ifdef _DEBUG
 	DrawFPS(0, 0);
@@ -53,7 +56,7 @@ void gameplayDrawing(Player player, Texture2D& shipTexture)
 	
 	DrawText(TextFormat("%f", player.mousePos), 0, 30, 10, WHITE);
 
-	DrawLineV(player.bullet.pos, player.mousePos, WHITE);
+	//DrawLineV(player.bullet.pos, player.mousePos, WHITE);
 	
 	DrawCircle(player.pos.x, player.pos.y, player.radius, WHITE);
 #endif // _DEBUG
@@ -63,29 +66,40 @@ void gameplayDrawing(Player player, Texture2D& shipTexture)
 	if (player.isShooting)
 		DrawCircle(player.bullet.pos.x, player.bullet.pos.y, player.bullet.radius, RED);
 
+	//DrawTexture(screenBorder, 0, 0, WHITE);
+
 	EndDrawing();
 }
 
-void gameplayUpdates(Player& player, Texture2D shipTexture, Image shipGif)
+void gameplayUpdates(Player& player, Texture2D shipTexture, Image shipGif, Sound shootSound)
 {
-	playerUpdate(player);
+	playerUpdate(player, shootSound);
 
 	textureUpdate(shipTexture, shipGif);
 }
 
-void playerUpdate(Player& player)
+void playerUpdate(Player& player, Sound shootSoud)
 {
 	playerMovement(player);
 
-	playerShooting(player, player.bullet);
+	playerShooting(player, shootSoud, player.bullet);
 }
 
-void loadTextures(Texture2D& shipTexture, Image& shipGif)
+void loadTextures(Texture2D& shipTexture, Image& shipGif, Texture2D& screenBorder)
 {
 	int animFrames = 0;
 
 	shipGif = LoadImageAnim("../res/consept_ship.gif", &animFrames);
 	shipTexture = LoadTextureFromImage(shipGif);
+
+	screenBorder = LoadTexture("../res/gameplay_screen_border.png");
+
+	//screenBorder = LoadTexture("../res/png-clipart-aesthetics-white-crt-computer-monitor-thumbnail.png");
+}
+
+void loadAudio(Sound& shootSound)
+{
+	shootSound = LoadSound("../res/shoot_sound.wav");
 }
 
 void textureUpdate(Texture2D shipTexture, Image shipGif)
@@ -116,8 +130,6 @@ void textureUpdate(Texture2D shipTexture, Image shipGif)
 
 		frameCounter = 0;
 	}
-
-
 }
 
 //void loadPlayerTexture(Texture2D& shipTexture, int& currentAnimFrame, int& frameDelay, int& frameCounter)
