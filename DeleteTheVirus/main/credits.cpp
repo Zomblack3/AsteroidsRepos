@@ -21,12 +21,6 @@ void drawCredits()
 
 	ClearBackground(BLACK);
 
-#ifdef DEBUG
-	
-	DrawText(TextFormat("%i", MeasureText("CREDITS", 30)), 0, 20, 10, WHITE);
-
-#endif // DEBUG
-
 	//Principal text
 	DrawText("CREDITS", (windowWidth / 2) - MeasureText("CREDITS", principalTextFontSize / 2), (windowHeight / 2) - textPosY[0], principalTextFontSize, GREEN);
 

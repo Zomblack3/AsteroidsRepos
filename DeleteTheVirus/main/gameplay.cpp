@@ -97,6 +97,8 @@ void gameplayDrawing(Player player, Texture2D& shipTexture, Texture2D screenBord
 
 void gameplayUpdates(Player& player, Texture2D shipTexture, Image shipGif, Sound shootSound, Sound moveSound, Sound& backgroundSound, int& actualAmountOfEnemys)
 {
+	static int timerPlusEnemy = 50000;
+
 	if (!IsSoundPlaying(backgroundSound))
 		PlaySound(backgroundSound);
 
@@ -119,6 +121,14 @@ void gameplayUpdates(Player& player, Texture2D shipTexture, Image shipGif, Sound
 			--actualAmountOfEnemys;
 			--player.lives;
 		}
+
+	if (timerPlusEnemy > 0)
+		timerPlusEnemy -= 0.1;
+	else
+	{
+		timerPlusEnemy = 50000;
+		++maxEnemysAmount;
+	}
 }
 
 bool checkCollisionBulletEnemy(Bullet bullet, Virus virus) 
@@ -146,11 +156,19 @@ void loadTextures(Texture2D& shipTexture, Image& shipGif, Texture2D& screenBorde
 {
 	int animFrames = 0;
 
+	Image background = LoadImage("../res/viruspixelados.png");
+
 	shipGif = LoadImageAnim("../res/consept_ship.gif", &animFrames);
 
 	shipTexture = LoadTextureFromImage(shipGif);
 
-	screenBorder = LoadTexture("../res/Fondo.png");
+	//screenBorder = LoadTexture("../res/Fondo.png");
+
+	//viruspixelados.png
+
+	ImageResize(&background, 800, 600);
+
+	screenBorder = LoadTextureFromImage(background);
 
 	enemyLV1 = LoadTexture("../res/viruspixelados6.png");
 

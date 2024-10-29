@@ -30,7 +30,7 @@ void mainMenuDrawing(Buttons buttons[], std::string buttonsText[], int amountBut
 
 	DrawTexture(backgroundTexture, 0, 0, WHITE);
 
-	DrawText("DELETE THE VIRUS", MeasureText("DELETE THE VIRUS", 0), (windowHeight / 2) - (windowHeight / 4), 30, WHITE);
+	DrawText("DELETE THE VIRUS", MeasureText("DELETE THE VIRUS", 0), (windowHeight / 4), 25, WHITE);
 
 	for (int i = 0; i < amountButtons; i++)
 	{
