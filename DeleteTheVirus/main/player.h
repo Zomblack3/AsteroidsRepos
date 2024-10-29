@@ -41,7 +41,7 @@ struct Player
 	float directionX = 0;
 	float directionY = 0;
 	int lives = 3;
-	int ammo = 10;
+	int ammo = 1;
 	bool isShooting = false;
 	Bullet bullet;
 };

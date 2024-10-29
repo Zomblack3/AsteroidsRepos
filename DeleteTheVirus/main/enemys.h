@@ -17,5 +17,5 @@ struct Virus
     Texture2D texture;
 };
 
-Virus createVirus();
+Virus createVirus(Texture2D type1, Texture2D type2, Texture2D type3);
 void virusMovement(Virus& virus);

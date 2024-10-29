@@ -4,21 +4,33 @@ void mainMenu(ACTUAL_SCREEN& actualScreen, Buttons buttons[])
 {
 	const int amountButtons = 3;
 
+	static bool isTextureLoaded = false;
+	static Texture2D backgroundTexture;
+
 	std::string buttonsText[amountButtons] = { "START", "CREDITS", "EXIT" };
 
+	if (!isTextureLoaded)
+	{
+		loadTextures(backgroundTexture);
+
+		isTextureLoaded = true;
+	}
+
 	if (!WindowShouldClose())
-		mainMenuDrawing(buttons, buttonsText, amountButtons);
+		mainMenuDrawing(buttons, buttonsText, amountButtons, backgroundTexture);
 
 	mainMenuInputs(actualScreen, buttons, amountButtons);
 }
 
-void mainMenuDrawing(Buttons buttons[], std::string buttonsText[], int amountButtons)
+void mainMenuDrawing(Buttons buttons[], std::string buttonsText[], int amountButtons, Texture2D backgroundTexture)
 {
 	BeginDrawing();
 
 	ClearBackground(BLACK);
 
-	DrawText("DELETE THE VIRUS", MeasureText("DELETE THE VIRUS", 0), (windowHeight / 2) - (windowHeight / 4), 50, WHITE);
+	DrawTexture(backgroundTexture, 0, 0, WHITE);
+
+	DrawText("DELETE THE VIRUS", MeasureText("DELETE THE VIRUS", 0), (windowHeight / 2) - (windowHeight / 4), 30, WHITE);
 
 	for (int i = 0; i < amountButtons; i++)
 	{
@@ -50,4 +62,13 @@ void mainMenuInputs(ACTUAL_SCREEN& actualScreen, Buttons buttons[], int amountBu
 	if (CheckCollisionPointRec(GetMousePosition(), buttons[2].buttonRec))
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 			CloseWindow();
+}
+
+void loadTextures(Texture2D& background)
+{
+	Image backgroundImg = LoadImage("../res/viruspixelados2.png");
+
+	ImageResize(&backgroundImg, 750, 600);
+
+	background = LoadTextureFromImage(backgroundImg);
 }

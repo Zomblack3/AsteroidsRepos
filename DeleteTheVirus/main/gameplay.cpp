@@ -15,38 +15,37 @@ void gameplay(ACTUAL_SCREEN& actualScreen)
 	static int actualAmountOfEnemys;
 	int animFrames = 0;
 
-	for (actualAmountOfEnemys; actualAmountOfEnemys < maxEnemysAmount; ++actualAmountOfEnemys)
-		virus.push_back(createVirus());
-
 	static Player player;
 	static Image shipGif;
 	static Texture2D shipTexture;
 	static Texture2D screenBoarder;
-	static Texture2D enemyLV1;
+	static Texture2D enemyLVL1;
+	static Texture2D enemyLVL2;
+	static Texture2D enemyLVL3;
 	static Sound shootSound;
 	static Sound moveSound;
 	static Sound backgroundSound;
 
 	if (!areExtArchivesLoad)
 	{
-		loadTextures(shipTexture, shipGif, screenBoarder, enemyLV1);
+		loadTextures(shipTexture, shipGif, screenBoarder, enemyLVL1, enemyLVL2, enemyLVL3);
 
 		loadAudio(shootSound, moveSound, backgroundSound);
 
 		areExtArchivesLoad = true;
 	}
 
+	for (actualAmountOfEnemys; actualAmountOfEnemys < maxEnemysAmount; ++actualAmountOfEnemys)
+		virus.push_back(createVirus(enemyLVL1, enemyLVL2, enemyLVL3));
+
 	if (startTimer == 0)
 	{
 		gameplayUpdates(player, shipTexture, shipGif, shootSound, moveSound, backgroundSound, actualAmountOfEnemys);
-
-		for (Virus& virus : virus)
-			virusMovement(virus);
 	}
 	else
 		--startTimer;
 
-	gameplayDrawing(player, shipTexture, screenBoarder, enemyLV1);
+	gameplayDrawing(player, shipTexture, screenBoarder);
 
 	if (WindowShouldClose())
 	{
@@ -57,7 +56,7 @@ void gameplay(ACTUAL_SCREEN& actualScreen)
 	}
 }
 
-void gameplayDrawing(Player player, Texture2D& shipTexture, Texture2D screenBorder, Texture2D& enemyLV1)
+void gameplayDrawing(Player player, Texture2D& shipTexture, Texture2D screenBorder)
 {
 	BeginDrawing();
 
@@ -75,6 +74,10 @@ void gameplayDrawing(Player player, Texture2D& shipTexture, Texture2D screenBord
 	DrawLineV(player.bullet.pos, player.mousePos, WHITE);
 	
 	DrawCircle(player.pos.x, player.pos.y, player.radius, WHITE);
+
+	for (Virus& virus : virus)
+		DrawCircleV(virus.pos, virus.radius, WHITE);
+
 #endif // _DEBUG
 
 	DrawTexture(shipTexture, player.pos.x - static_cast <float> (shipTexture.width) / 2, player.pos.y - static_cast <float> (shipTexture.height) / 2, WHITE);
@@ -83,10 +86,11 @@ void gameplayDrawing(Player player, Texture2D& shipTexture, Texture2D screenBord
 		DrawCircle(player.bullet.pos.x, player.bullet.pos.y, player.bullet.radius, RED);
 
 	for (Virus& virus : virus)
-	{
-		DrawCircleV(virus.pos, virus.radius, WHITE);
-		DrawTexture(enemyLV1, virus.pos.x - (virus.radius * 2), virus.pos.y - (virus.radius * 2), WHITE);
-	}
+		DrawTexture(virus.texture, virus.pos.x - (virus.radius * 2), virus.pos.y - (virus.radius * 2), WHITE);
+
+	DrawText(TextFormat("Lives: %0i", player.lives), 10, 0, 20, WHITE);
+
+	DrawRectangle(windowWidth - 30, 5, 20, 20, WHITE);
 
 	EndDrawing();
 }
@@ -98,21 +102,37 @@ void gameplayUpdates(Player& player, Texture2D shipTexture, Image shipGif, Sound
 
 	playerUpdate(player, shootSound, moveSound);
 
+	for (Virus& virus : virus)
+		virusMovement(virus);
+
 	textureUpdate(shipTexture, shipGif);
 
 	for (int i = 0; i < virus.size(); i++)
-		if (checkCollision(player, virus[i]))
+		if (checkCollisionBulletEnemy(player.bullet, virus[i]))
 		{
 			virus.erase(virus.begin() + i);
 			--actualAmountOfEnemys;
 		}
+		else if (checkCollisionPlayerEnemy(player, virus[i]))
+		{
+			virus.erase(virus.begin() + i);
+			--actualAmountOfEnemys;
+			--player.lives;
+		}
 }
 
-bool checkCollision(Player player, Virus virus) 
+bool checkCollisionBulletEnemy(Bullet bullet, Virus virus) 
 {
-	float distance = sqrt(pow(player.bullet.pos.x - virus.pos.x, 2) + pow(player.bullet.pos.y - virus.pos.y, 2));
+	float distance = sqrt(pow(bullet.pos.x - virus.pos.x, 2) + pow(bullet.pos.y - virus.pos.y, 2));
 
-	return distance < player.bullet.radius + virus.radius;
+	return distance < bullet.radius + virus.radius;
+}
+
+bool checkCollisionPlayerEnemy(Player player, Virus virus)
+{
+	float distance = sqrt(pow(player.pos.x - virus.pos.x, 2) + pow(player.pos.y - virus.pos.y, 2));
+
+	return distance < player.radius + virus.radius;
 }
 
 void playerUpdate(Player& player, Sound shootSoud, Sound moveSound)
@@ -122,7 +142,7 @@ void playerUpdate(Player& player, Sound shootSoud, Sound moveSound)
 	playerShooting(player, shootSoud, player.bullet);
 }
 
-void loadTextures(Texture2D& shipTexture, Image& shipGif, Texture2D& screenBorder, Texture2D& enemyLV1)
+void loadTextures(Texture2D& shipTexture, Image& shipGif, Texture2D& screenBorder, Texture2D& enemyLV1, Texture2D& enemyLV2, Texture2D& enemyLV3)
 {
 	int animFrames = 0;
 
@@ -132,13 +152,19 @@ void loadTextures(Texture2D& shipTexture, Image& shipGif, Texture2D& screenBorde
 
 	screenBorder = LoadTexture("../res/Fondo.png");
 
-	enemyLV1 = LoadTexture("../res/virus_level_1-removebg-preview.png");
+	enemyLV1 = LoadTexture("../res/viruspixelados6.png");
+
+	enemyLV2 = LoadTexture("../res/viruspixelados5.png");
+
+	enemyLV3 = LoadTexture("../res/viruspixelados4.png");
 }
 
 void loadAudio(Sound& shootSound, Sound& moveSound, Sound& backgroundSound)
 {
 	shootSound = LoadSound("../res/shoot_sound.wav");
+
 	moveSound = LoadSound("../res/move_sound.wav");
+	
 	backgroundSound = LoadSound("../res/background_music.mp3");
 }
 

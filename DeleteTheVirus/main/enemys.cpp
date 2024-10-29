@@ -1,11 +1,35 @@
 #include "enemys.h"
 
-Virus createVirus()
+Virus createVirus(Texture2D type1, Texture2D type2, Texture2D type3)
 {
+    float speedRegulator = 10.0f;
+    int textureNum = GetRandomValue(1, 3);
+
 	Virus virus;
     virus.pos = { static_cast <float> (GetRandomValue(0, GetScreenWidth())), static_cast <float> (GetRandomValue(0, GetScreenHeight())) };
-	virus.speed = { static_cast <float> (GetRandomValue(virus.minSpeed, virus.maxSpeed) / 10.0), static_cast <float> (GetRandomValue(virus.minSpeed, virus.maxSpeed) / 10.0) };
-    virus.radius = static_cast <float> (/*GetRandomValue(virus.minSize, virus.maxSize)*/10);
+	virus.speed = { static_cast <float> (GetRandomValue(virus.minSpeed, virus.maxSpeed) / speedRegulator), static_cast <float> (GetRandomValue(virus.minSpeed, virus.maxSpeed) / speedRegulator) };
+    virus.radius = static_cast <float> (10);
+
+    switch (textureNum)
+    {
+    case 1:
+        
+        virus.texture = type1;
+
+        break;
+    case 2:
+
+        virus.texture = type2;
+
+        break;
+    case 3:
+
+        virus.texture = type3;
+
+        break;
+    default:
+        break;
+    }
 
 	return virus;
 }

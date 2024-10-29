@@ -1,5 +1,7 @@
 #pragma once
 
+#include <raylib.h>
+
 namespace run
 {
 	void game();

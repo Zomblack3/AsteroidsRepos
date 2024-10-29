@@ -8,8 +8,9 @@
 namespace run
 {
 	const int amountButtonsMainMenu = 3;
-	const int amountButtonsPause = 2;
 	const int amountButtonsCredits = 4;
+	const int amountButtonsGameplay = 1;
+	const int amountButtonsPause = 2;
 
 	ACTUAL_SCREEN actualScreen = MAIN_MENU;
 	Buttons buttonsMainMenu[amountButtonsMainMenu];

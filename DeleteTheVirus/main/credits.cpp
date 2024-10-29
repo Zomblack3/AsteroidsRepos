@@ -11,26 +11,36 @@ void credits(ACTUAL_SCREEN& actualScreen)
 
 void drawCredits()
 {
+	const int textAmount = 5;
+
+	int principalTextFontSize = 30;
+	int secondaryTextFontSize = 20;
+	int textPosY[textAmount] = { 200, 150, 100, 50, 0 };
+
 	BeginDrawing();
 
 	ClearBackground(BLACK);
 
+#ifdef DEBUG
+	
 	DrawText(TextFormat("%i", MeasureText("CREDITS", 30)), 0, 20, 10, WHITE);
 
-	DrawText("CREDITS", MeasureText("CREDITS", 0), (windowHeight / 2) - 200, 30, GREEN);
+#endif // DEBUG
 
-	//MeasureText("CREDITS", 30)
+	//Principal text
+	DrawText("CREDITS", (windowWidth / 2) - MeasureText("CREDITS", principalTextFontSize / 2), (windowHeight / 2) - textPosY[0], principalTextFontSize, GREEN);
 
 	//I
-	DrawText("Game created by Santiago Britos", MeasureText("Game created by Santiago Britos", 0), (windowHeight / 2) - 150, 20, WHITE);
+	DrawText("Game created by Santiago Britos", (windowWidth / 2) - MeasureText("Game created by Santiago Britos", secondaryTextFontSize / 2), (windowHeight / 2) - textPosY[1], secondaryTextFontSize, WHITE);
 
 	//Librarys
-	DrawText("Library: Raylib.h", MeasureText("Library: Raylib.h", 20), (windowHeight / 2) - 100, 20, WHITE);
+	DrawText("Library: Raylib.h", (windowWidth / 2) - MeasureText("Library: Raylib.h", secondaryTextFontSize / 2), (windowHeight / 2) - textPosY[2], secondaryTextFontSize, WHITE);
 
 	//Audio
+	DrawText("Audio Tool: Chiptone", (windowWidth / 2) - MeasureText("Audio Tool: Chiptone", secondaryTextFontSize / 2), (windowHeight / 2) - textPosY[3], secondaryTextFontSize, WHITE);
 
 	//Textures
-	DrawText("Textures by Milagros Gubert", MeasureText("Textures by Milagros Gubert", 20), (windowHeight / 2) + 100, 20, WHITE);
+	DrawText("Textures by Milagros Gubert", (windowWidth / 2) - MeasureText("Textures by Milagros Gubert", secondaryTextFontSize / 2), windowHeight / 2, secondaryTextFontSize, WHITE);
 
 	EndDrawing();
 }
