@@ -149,6 +149,7 @@
     <ClCompile Include="credits.cpp" />
     <ClCompile Include="enemys.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="gameOver.cpp" />
     <ClCompile Include="gameplay.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainMenu.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="credits.h" />
     <ClInclude Include="enemys.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="gameOver.h" />
     <ClInclude Include="gameplay.h" />
     <ClInclude Include="mainMenu.h" />
     <ClInclude Include="player.h" />

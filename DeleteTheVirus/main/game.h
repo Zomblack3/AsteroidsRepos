@@ -11,7 +11,8 @@ enum ACTUAL_SCREEN
 {
 	MAIN_MENU,
 	CREDITS,
-	GAMEPLAY
+	GAMEPLAY, 
+	GAME_OVER
 };
 
 const int windowWidth = 750;

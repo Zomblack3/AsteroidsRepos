@@ -40,7 +40,7 @@ void gameplay(ACTUAL_SCREEN& actualScreen)
 
 	if (startTimer == 0)
 	{
-		gameplayUpdates(player, shipTexture, shipGif, shootSound, moveSound, backgroundSound, actualAmountOfEnemys);
+		gameplayUpdates(player, shipTexture, shipGif, shootSound, moveSound, backgroundSound, actualAmountOfEnemys, actualScreen);
 	}
 	else
 		--startTimer;
@@ -95,7 +95,7 @@ void gameplayDrawing(Player player, Texture2D& shipTexture, Texture2D screenBord
 	EndDrawing();
 }
 
-void gameplayUpdates(Player& player, Texture2D shipTexture, Image shipGif, Sound shootSound, Sound moveSound, Sound& backgroundSound, int& actualAmountOfEnemys)
+void gameplayUpdates(Player& player, Texture2D shipTexture, Image shipGif, Sound shootSound, Sound moveSound, Sound& backgroundSound, int& actualAmountOfEnemys, ACTUAL_SCREEN& actualScreen)
 {
 	static int timerPlusEnemy = 50000;
 
@@ -129,6 +129,9 @@ void gameplayUpdates(Player& player, Texture2D shipTexture, Image shipGif, Sound
 		timerPlusEnemy = 50000;
 		++maxEnemysAmount;
 	}
+
+	if (player.lives <= 0)
+		actualScreen = GAME_OVER;
 }
 
 bool checkCollisionBulletEnemy(Bullet bullet, Virus virus) 

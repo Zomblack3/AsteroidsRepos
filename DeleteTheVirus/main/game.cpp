@@ -45,6 +45,11 @@ namespace run
 				gameplay(actualScreen);
 
 				break;
+			case GAME_OVER:
+
+
+
+				break;
 			default:
 				break;
 			}
