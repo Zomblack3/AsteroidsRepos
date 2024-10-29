@@ -5,15 +5,15 @@ Virus createVirus()
 	Virus virus;
     virus.pos = { static_cast <float> (GetRandomValue(0, GetScreenWidth())), static_cast <float> (GetRandomValue(0, GetScreenHeight())) };
 	virus.speed = { static_cast <float> (GetRandomValue(virus.minSpeed, virus.maxSpeed) / 10.0), static_cast <float> (GetRandomValue(virus.minSpeed, virus.maxSpeed) / 10.0) };
-    virus.radius = static_cast <float> (GetRandomValue(virus.minSize, virus.maxSize));
+    virus.radius = static_cast <float> (/*GetRandomValue(virus.minSize, virus.maxSize)*/10);
 
 	return virus;
 }
 
 void virusMovement(Virus& virus)
 {
-    virus.pos.x += virus.speed.x;
-    virus.pos.y += virus.speed.y;
+    virus.pos.x += virus.speed.x * (virus.generalSpeed * GetFrameTime());
+    virus.pos.y += virus.speed.y * (virus.generalSpeed * GetFrameTime());
 
     // Colisiones con bordes
     if (virus.pos.x < 0) 

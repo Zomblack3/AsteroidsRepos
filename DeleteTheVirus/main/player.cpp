@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-void playerMovement(Player& player)
+void playerMovement(Player& player, Sound moveSound)
 {
 	player.generalSpeed = player.baseSpeed;
 	float delta = GetFrameTime();
@@ -19,66 +19,50 @@ void playerMovement(Player& player)
 
 	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 	{
+		if (!IsSoundPlaying(moveSound))
+			PlaySound(moveSound);
+
 		if (player.baseSpeed == 0)
 			player.baseSpeed = player.minSpeed;
 
 		if (cos(player.angle) < 0.1 && sin(player.angle) < 0.1)
 		{
-			/*player.pos.x -= (player.speedX * -1.0) * player.generalSpeed;
-			player.pos.y -= (player.speedY * -1.0) * player.generalSpeed;*/
-
 			constDirectionX = player.directionX;
 			constDirectionY = player.directionY;
-
-			if (player.baseSpeed < player.maxSpeed)
-				player.baseSpeed += 0.1;
 
 			player.directionSection = III;
 		}
 		else if (cos(player.angle) > 0.1 && sin(player.angle) > 0.1)
 		{
-			/*player.pos.x += player.speedX * player.generalSpeed;
-			player.pos.y += player.speedY * player.generalSpeed;*/
-
 			constDirectionX = player.directionX;
 			constDirectionY = player.directionY;
-
-			if (player.baseSpeed < player.maxSpeed)
-				player.baseSpeed += 0.1;
 
 			player.directionSection = I;
 		}
 		else if (cos(player.angle) < 0.1 && sin(player.angle) > 0.1)
 		{
-			/*player.pos.x -= (player.speedX * -1.0) * player.generalSpeed;
-			player.pos.y += player.speedY * player.generalSpeed;*/
-
 			constDirectionX = player.directionX;
 			constDirectionY = player.directionY;
-
-			if (player.baseSpeed < player.maxSpeed)
-				player.baseSpeed += 0.1;
 
 			player.directionSection = II;
 		}
 		else if (cos(player.angle) > 0.1 && sin(player.angle) < 0.1 )
 		{
-			/*player.pos.x -= (player.speedX * -1.0) * player.generalSpeed;
-			player.pos.y += player.speedY * player.generalSpeed;*/
-
 			constDirectionX = player.directionX;
 			constDirectionY = player.directionY;
 
-			if (player.baseSpeed < player.maxSpeed)
-				player.baseSpeed += 0.1;
-
 			player.directionSection = IV;
 		}
+
+		if (player.baseSpeed < player.maxSpeed)
+			player.baseSpeed += 0.01;
 	}
 	else
 	{
 		if (player.baseSpeed > player.minSpeed)
-			player.baseSpeed -= 0.1f;
+			player.baseSpeed -= 0.01f;
+
+		StopSound(moveSound);
 	}
 
 	switch (player.directionSection)

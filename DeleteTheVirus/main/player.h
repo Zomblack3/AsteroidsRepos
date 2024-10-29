@@ -2,7 +2,7 @@
 
 #include "game.h"
 
-#include "raylib.h"
+#include <raylib.h>
 
 enum DIRECTION_SECTION
 {
@@ -34,8 +34,8 @@ struct Player
 	Vector2 speed = { }; // Change later
 	float angle = 0;
 	float radius = 15;
-	float minSpeed = 250.0f;
-	float maxSpeed = 1000.0f;
+	float minSpeed = 150.0f;
+	float maxSpeed = 400.0f;
 	float baseSpeed = 0;
 	float generalSpeed = 0;
 	float directionX = 0;
@@ -46,6 +46,6 @@ struct Player
 	Bullet bullet;
 };
 
-void playerMovement(Player& player);
+void playerMovement(Player& player, Sound moveSound);
 void playerShooting(Player& player, Sound shootSound, Bullet& bullet);
 void shoot(Bullet& bullet, float speedX, float speedY);

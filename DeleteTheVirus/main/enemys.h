@@ -2,7 +2,7 @@
 
 #include "game.h"
 
-#include "raylib.h"
+#include <raylib.h>
 
 struct Virus
 {
@@ -12,7 +12,9 @@ struct Virus
     int minSize = 5;
     Vector2 pos = { };
     Vector2 speed = { };
+    float generalSpeed = 200.0;
     float radius = 0;
+    Texture2D texture;
 };
 
 Virus createVirus();
