@@ -200,3 +200,18 @@ void shoot(Bullet& bullet, float speedX, float speedY)
 		break;
 	}
 }
+
+void restartPlayer(Player& player)
+{
+	player.directionSection = CENTER;
+	player.mousePos = { };
+	player.pos = { windowWidth / 2, windowHeight / 2 };
+	player.angle = 0;
+	player.directionX = 0;
+	player.directionY = 0;
+	player.lives = 3;
+	player.ammo = 1;
+	player.isShooting = false;
+	player.bullet;
+	player.score = 0;
+}

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "game.h"
-
+#include "gameplay.h"
 #include "buttons.h"
 
 #include <iostream>

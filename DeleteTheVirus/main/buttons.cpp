@@ -2,17 +2,17 @@
 
 #include "game.h"
 
-void buttonsCreator(Buttons buttons[], int amountButtons, float startingPosY, float staringPosX)
+void buttonsCreator(Buttons buttons[], int amountButtons, float startingPosY, float staringPosX, int width, int height)
 {
-	int buttonDistance = 40;
+	int buttonDistance = height * 2;
 	float posY = static_cast <float> (windowHeight) / 2;
 
 	for (int i = 0; i < amountButtons; i++)
 	{
-		buttons[i].buttonRec.x = /*(windowWidth / 2) - 20*/staringPosX;
-		buttons[i].buttonRec.y = /*posY*/startingPosY + (buttonDistance * i);
-		buttons[i].buttonRec.width = 75;
-		buttons[i].buttonRec.height = 25;
+		buttons[i].buttonRec.x = staringPosX;
+		buttons[i].buttonRec.y = startingPosY + (buttonDistance * i);
+		buttons[i].buttonRec.width = width;
+		buttons[i].buttonRec.height = height;
 		buttons[i].buttonColor = RED;
 	}
 }

@@ -15,6 +15,8 @@ struct Virus
     float generalSpeed = 200.0;
     float radius = 0;
     Texture2D texture;
+    int lives = 0;
+    Color color;
 };
 
 Virus createVirus(Texture2D type1, Texture2D type2, Texture2D type3);

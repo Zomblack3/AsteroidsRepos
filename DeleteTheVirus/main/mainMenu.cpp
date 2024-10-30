@@ -61,7 +61,10 @@ void mainMenuInputs(ACTUAL_SCREEN& actualScreen, Buttons buttons[], int amountBu
 
 	if (CheckCollisionPointRec(GetMousePosition(), buttons[2].buttonRec))
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+		{
 			CloseWindow();
+			unloadAll();
+		}
 }
 
 void loadTextures(Texture2D& background)

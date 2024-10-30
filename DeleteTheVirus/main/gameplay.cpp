@@ -6,29 +6,40 @@ int maxEnemysAmount = 5;
 
 std::vector<Virus> virus;
 
-void gameplay(ACTUAL_SCREEN& actualScreen)
+Image shipGif;
+Texture2D shipTexture;
+Texture2D background;
+Texture2D enemyLVL1;
+Texture2D enemyLVL2;
+Texture2D enemyLVL3;
+Sound shootSound;
+Sound moveSound;
+Sound backgroundSound;
+
+void gameplay(ACTUAL_SCREEN& actualScreen, Player& player)
 {
-	const int amountButtons = 2;
+	const int amountButtons = 1;
 
 	static int startTimer = 200;
 	static bool areExtArchivesLoad = false;
 	static int actualAmountOfEnemys;
+
 	int animFrames = 0;
 
-	static Player player;
-	static Image shipGif;
-	static Texture2D shipTexture;
-	static Texture2D screenBoarder;
-	static Texture2D enemyLVL1;
-	static Texture2D enemyLVL2;
-	static Texture2D enemyLVL3;
-	static Sound shootSound;
-	static Sound moveSound;
-	static Sound backgroundSound;
+	////static Player player;
+	//static Image shipGif;
+	//static Texture2D shipTexture;
+	//static Texture2D background;
+	//static Texture2D enemyLVL1;
+	//static Texture2D enemyLVL2;
+	//static Texture2D enemyLVL3;
+	//static Sound shootSound;
+	//static Sound moveSound;
+	//static Sound backgroundSound;
 
 	if (!areExtArchivesLoad)
 	{
-		loadTextures(shipTexture, shipGif, screenBoarder, enemyLVL1, enemyLVL2, enemyLVL3);
+		loadTextures(shipTexture, shipGif, background, enemyLVL1, enemyLVL2, enemyLVL3);
 
 		loadAudio(shootSound, moveSound, backgroundSound);
 
@@ -45,24 +56,30 @@ void gameplay(ACTUAL_SCREEN& actualScreen)
 	else
 		--startTimer;
 
-	gameplayDrawing(player, shipTexture, screenBoarder);
+	gameplayDrawing(player, shipTexture, background);
 
 	if (WindowShouldClose())
 	{
-		UnloadTexture(shipTexture);
-		UnloadImage(shipGif);
-		UnloadSound(shootSound);
 		UnloadSound(moveSound);
+		UnloadSound(shootSound);
+		UnloadSound(backgroundSound);
+
+		UnloadImage(shipGif);
+
+		UnloadTexture(shipTexture);
+		
+		for (Virus& virus : virus)
+			UnloadTexture(virus.texture);
 	}
 }
 
-void gameplayDrawing(Player player, Texture2D& shipTexture, Texture2D screenBorder)
+void gameplayDrawing(Player player, Texture2D& shipTexture, Texture2D background)
 {
 	BeginDrawing();
 
 	ClearBackground(BLACK);
 
-	DrawTexture(screenBorder, -15, 0, WHITE);
+	DrawTexture(background, -15, 0, WHITE);
 
 #ifdef _DEBUG
 	DrawFPS(0, 0);
@@ -80,13 +97,15 @@ void gameplayDrawing(Player player, Texture2D& shipTexture, Texture2D screenBord
 
 #endif // _DEBUG
 
+	DrawText(TextFormat("Score: %i", player.score), 10, 30, 20, WHITE);
+
 	DrawTexture(shipTexture, player.pos.x - static_cast <float> (shipTexture.width) / 2, player.pos.y - static_cast <float> (shipTexture.height) / 2, WHITE);
 
 	if (player.isShooting)
 		DrawCircle(player.bullet.pos.x, player.bullet.pos.y, player.bullet.radius, RED);
 
 	for (Virus& virus : virus)
-		DrawTexture(virus.texture, virus.pos.x - (virus.radius * 2), virus.pos.y - (virus.radius * 2), WHITE);
+		DrawTexture(virus.texture, virus.pos.x - (virus.radius * 2), virus.pos.y - (virus.radius * 2), virus.color);
 
 	DrawText(TextFormat("Lives: %0i", player.lives), 10, 0, 20, WHITE);
 
@@ -98,28 +117,56 @@ void gameplayDrawing(Player player, Texture2D& shipTexture, Texture2D screenBord
 void gameplayUpdates(Player& player, Texture2D shipTexture, Image shipGif, Sound shootSound, Sound moveSound, Sound& backgroundSound, int& actualAmountOfEnemys, ACTUAL_SCREEN& actualScreen)
 {
 	static int timerPlusEnemy = 50000;
+	static int damageTimer = 0;
+	static bool isAlive = true;
+	static int invencibilityTimer = 0;
 
 	if (!IsSoundPlaying(backgroundSound))
 		PlaySound(backgroundSound);
 
 	playerUpdate(player, shootSound, moveSound);
 
+	textureUpdate(shipTexture, shipGif);
+	
 	for (Virus& virus : virus)
 		virusMovement(virus);
 
-	textureUpdate(shipTexture, shipGif);
+	for (Virus& virus : virus)
+		if (checkCollisionBulletEnemy(player.bullet, virus))
+		{
+			if (virus.lives <= 0)
+			{
+				isAlive = false;
+				++player.score;
+			}
+			else
+			{
+				--virus.lives;
+				virus.color = RED;
+			}
+		}
+		else
+			virus.color = WHITE;
 
 	for (int i = 0; i < virus.size(); i++)
 		if (checkCollisionBulletEnemy(player.bullet, virus[i]))
-		{
-			virus.erase(virus.begin() + i);
-			--actualAmountOfEnemys;
+		{	
+			if (!isAlive)
+			{
+				virus.erase(virus.begin() + i);
+				--actualAmountOfEnemys;
+				isAlive = true;
+			}
 		}
 		else if (checkCollisionPlayerEnemy(player, virus[i]))
 		{
-			virus.erase(virus.begin() + i);
-			--actualAmountOfEnemys;
-			--player.lives;
+			if (isAlive && invencibilityTimer <= 0)
+			{
+				virus.erase(virus.begin() + i);
+				--actualAmountOfEnemys;
+				--player.lives;
+				invencibilityTimer = 1000;
+			}
 		}
 
 	if (timerPlusEnemy > 0)
@@ -130,8 +177,17 @@ void gameplayUpdates(Player& player, Texture2D shipTexture, Image shipGif, Sound
 		++maxEnemysAmount;
 	}
 
+	if (invencibilityTimer > 0)
+		invencibilityTimer -= 0.1;
+
 	if (player.lives <= 0)
+	{
 		actualScreen = GAME_OVER;
+		
+		StopSound(backgroundSound);
+
+		StopSound(moveSound);
+	}
 }
 
 bool checkCollisionBulletEnemy(Bullet bullet, Virus virus) 
@@ -155,23 +211,19 @@ void playerUpdate(Player& player, Sound shootSoud, Sound moveSound)
 	playerShooting(player, shootSoud, player.bullet);
 }
 
-void loadTextures(Texture2D& shipTexture, Image& shipGif, Texture2D& screenBorder, Texture2D& enemyLV1, Texture2D& enemyLV2, Texture2D& enemyLV3)
+void loadTextures(Texture2D& shipTexture, Image& shipGif, Texture2D& background, Texture2D& enemyLV1, Texture2D& enemyLV2, Texture2D& enemyLV3)
 {
 	int animFrames = 0;
 
-	Image background = LoadImage("../res/viruspixelados.png");
+	Image backgroundIMG = LoadImage("../res/viruspixelados.png");
 
 	shipGif = LoadImageAnim("../res/consept_ship.gif", &animFrames);
 
 	shipTexture = LoadTextureFromImage(shipGif);
 
-	//screenBorder = LoadTexture("../res/Fondo.png");
+	ImageResize(&backgroundIMG, 800, 600);
 
-	//viruspixelados.png
-
-	ImageResize(&background, 800, 600);
-
-	screenBorder = LoadTextureFromImage(background);
+	background = LoadTextureFromImage(backgroundIMG);
 
 	enemyLV1 = LoadTexture("../res/viruspixelados6.png");
 
@@ -219,24 +271,16 @@ void textureUpdate(Texture2D shipTexture, Image shipGif)
 	}
 }
 
-void pause(ACTUAL_SCREEN& actualScreen)
+void unloadAll()
 {
+	UnloadSound(moveSound);
+	UnloadSound(shootSound);
+	UnloadSound(backgroundSound);
 
+	UnloadImage(shipGif);
+
+	UnloadTexture(shipTexture);
+
+	for (Virus& virus : virus)
+		UnloadTexture(virus.texture);
 }
-
-void pauseInputs(ACTUAL_SCREEN& actualScreen)
-{
-
-}
-
-void pauseDrawing()
-{
-
-}
-
-//void loadPlayerTexture(Texture2D& shipTexture, int& currentAnimFrame, int& frameDelay, int& frameCounter)
-//{
-//	unsigned int nextFrameDataOffset = 0;
-//
-//	++currentAnimFrame;
-//}

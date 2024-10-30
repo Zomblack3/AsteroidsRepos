@@ -8,4 +8,4 @@ struct Buttons
 	Color buttonColor;
 };
 
-void buttonsCreator(Buttons buttons[], int amountButtons);
+void buttonsCreator(Buttons buttons[], int amountButtons, float startingPosY, float staringPosX, int width, int height);

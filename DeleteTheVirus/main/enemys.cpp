@@ -15,21 +15,26 @@ Virus createVirus(Texture2D type1, Texture2D type2, Texture2D type3)
     case 1:
         
         virus.texture = type1;
+        virus.lives = 1;
 
         break;
     case 2:
 
         virus.texture = type2;
+        virus.lives = 2;
 
         break;
     case 3:
 
         virus.texture = type3;
+        virus.lives = 3;
 
         break;
     default:
         break;
     }
+
+    virus.color = WHITE;
 
 	return virus;
 }

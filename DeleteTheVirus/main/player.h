@@ -31,7 +31,6 @@ struct Player
 	DIRECTION_SECTION directionSection = CENTER;
 	Vector2 mousePos = { };
 	Vector2 pos = { windowWidth / 2, windowHeight / 2 };
-	Vector2 speed = { }; // Change later
 	float angle = 0;
 	float radius = 15;
 	float minSpeed = 150.0f;
@@ -44,8 +43,10 @@ struct Player
 	int ammo = 1;
 	bool isShooting = false;
 	Bullet bullet;
+	int score = 0;
 };
 
 void playerMovement(Player& player, Sound moveSound);
 void playerShooting(Player& player, Sound shootSound, Bullet& bullet);
 void shoot(Bullet& bullet, float speedX, float speedY);
+void restartPlayer(Player& player);
